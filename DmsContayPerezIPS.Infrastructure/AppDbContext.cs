@@ -1,4 +1,6 @@
-﻿using DmsContayPerezIPS.Domain.Entities;
+﻿using System;
+using System.Linq;
+using DmsContayPerezIPS.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using DmsContayPerezIPS.Domain.Enums;
 
@@ -23,6 +25,20 @@ namespace DmsContayPerezIPS.Infrastructure.Persistence
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            // ==========================================================
+            // ✅ Forzar DateTime/DateTime? a "timestamp without time zone"
+            // ==========================================================
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                var dateTimeProps = entityType.GetProperties()
+                    .Where(p => p.ClrType == typeof(DateTime) || p.ClrType == typeof(DateTime?));
+
+                foreach (var p in dateTimeProps)
+                {
+                    p.SetColumnType("timestamp without time zone");
+                }
+            }
 
             // ==========================================================
             // 🔹 Conversión de enum DisposicionFinal → string
@@ -95,7 +111,7 @@ namespace DmsContayPerezIPS.Infrastructure.Persistence
             );
 
             // ==========================================================
-            // 🔹 Seed Subseries Documentales (valores estáticos)
+            // 🔹 Seed Subseries Documentales
             // ==========================================================
             modelBuilder.Entity<SubserieDocumental>().HasData(
                 new SubserieDocumental { Id = 1, SerieId = 1, Nombre = "Historias clínicas", RetencionGestion = 15, RetencionCentral = 0, DisposicionFinal = DisposicionFinalEnum.CT },
@@ -114,9 +130,9 @@ namespace DmsContayPerezIPS.Infrastructure.Persistence
             );
 
             // ==========================================================
-            // 🔹 Seed Tipos Documentales (fechas estáticas)
+            // 🔹 Seed Tipos Documentales (fechas Unspecified)
             // ==========================================================
-            var fixedCreatedAt = new DateTime(2025, 1, 1);
+            var fixedCreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Unspecified);
 
             modelBuilder.Entity<TipoDocumental>().HasData(
                 new TipoDocumental { Id = 1, SubserieId = 1, Nombre = "Historia de ingreso", DisposicionFinal = DisposicionFinalEnum.CT, IsActive = true, CreatedAt = fixedCreatedAt },
