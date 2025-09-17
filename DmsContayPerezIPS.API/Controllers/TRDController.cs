@@ -23,7 +23,7 @@ namespace DmsContayPerezIPS.API.Controllers
         {
             var series = await _db.Series
                 .Include(s => s.Subseries!)
-                    .ThenInclude(ss => ss.Tipos)
+                    .ThenInclude(ss => ss.TiposDocumentales!)
                 .Select(s => new
                 {
                     s.Id,
@@ -35,16 +35,77 @@ namespace DmsContayPerezIPS.API.Controllers
                         ss.RetencionGestion,
                         ss.RetencionCentral,
                         ss.DisposicionFinal,
-                        Tipos = ss.Tipos!.Select(t => new
+                        Tipos = ss.TiposDocumentales!.Select(t => new
                         {
                             t.Id,
-                            t.Nombre
+                            t.Nombre,
+                            t.DisposicionFinal
                         })
                     })
                 })
                 .ToListAsync();
 
             return Ok(series);
+        }
+
+        // 🔹 Devuelve una serie específica por Id con sus subseries y tipos
+        [HttpGet("series/{id:long}")]
+        public async Task<IActionResult> GetSerieById(long id)
+        {
+            var serie = await _db.Series
+                .Include(s => s.Subseries!)
+                    .ThenInclude(ss => ss.TiposDocumentales!)
+                .Where(s => s.Id == id)
+                .Select(s => new
+                {
+                    s.Id,
+                    s.Nombre,
+                    Subseries = s.Subseries!.Select(ss => new
+                    {
+                        ss.Id,
+                        ss.Nombre,
+                        ss.RetencionGestion,
+                        ss.RetencionCentral,
+                        ss.DisposicionFinal,
+                        Tipos = ss.TiposDocumentales!.Select(t => new
+                        {
+                            t.Id,
+                            t.Nombre,
+                            t.DisposicionFinal
+                        })
+                    })
+                })
+                .FirstOrDefaultAsync();
+
+            if (serie == null)
+                return NotFound(new { message = $"No existe la serie con Id={id}" });
+
+            return Ok(serie);
+        }
+
+        // 🔹 Devuelve todas las subseries con sus tipos documentales
+        [HttpGet("subseries")]
+        public async Task<IActionResult> GetSubseries()
+        {
+            var subseries = await _db.Subseries
+                .Include(ss => ss.TiposDocumentales!)
+                .Select(ss => new
+                {
+                    ss.Id,
+                    ss.Nombre,
+                    ss.RetencionGestion,
+                    ss.RetencionCentral,
+                    ss.DisposicionFinal,
+                    Tipos = ss.TiposDocumentales!.Select(t => new
+                    {
+                        t.Id,
+                        t.Nombre,
+                        t.DisposicionFinal
+                    })
+                })
+                .ToListAsync();
+
+            return Ok(subseries);
         }
     }
 }

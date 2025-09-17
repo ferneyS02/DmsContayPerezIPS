@@ -1,9 +1,11 @@
 ﻿using DmsContayPerezIPS.Domain.Entities;
 using DmsContayPerezIPS.Infrastructure.Persistence;
+using DmsContayPerezIPS.API.Services; // 👈 para usar SpanishDateParser
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Minio;
 using Minio.DataModel.Args;
+using System.Text.Json;
 
 namespace DmsContayPerezIPS.API.Controllers
 {
@@ -22,13 +24,20 @@ namespace DmsContayPerezIPS.API.Controllers
             _bucket = config["MinIO:Bucket"] ?? "dms";
         }
 
-        // 🔐 Requiere token JWT
+        // ==========================================================
+        // 🔐 Subida de documentos
+        // ==========================================================
         [HttpPost("upload")]
         [Authorize]
-        public async Task<IActionResult> Upload(IFormFile file)
+        public async Task<IActionResult> Upload(IFormFile file, string? documentDate = null)
         {
             if (file == null || file.Length == 0)
                 return BadRequest("Archivo inválido");
+
+            // Verificar/crear bucket
+            bool bucketExists = await _minio.BucketExistsAsync(new BucketExistsArgs().WithBucket(_bucket));
+            if (!bucketExists)
+                await _minio.MakeBucketAsync(new MakeBucketArgs().WithBucket(_bucket));
 
             var objectName = $"{Guid.NewGuid()}_{file.FileName}";
 
@@ -42,22 +51,38 @@ namespace DmsContayPerezIPS.API.Controllers
                     .WithContentType(file.ContentType));
             }
 
+            DateTime? parsedDocDate = null;
+            if (!string.IsNullOrWhiteSpace(documentDate))
+            {
+                if (SpanishDateParser.TryParse(documentDate, out var parsed))
+                    parsedDocDate = parsed;
+            }
+
             var doc = new Document
             {
                 OriginalName = file.FileName,
+                ObjectName = objectName,   // ✅ Guardamos cómo se llama en MinIO
                 ContentType = file.ContentType,
                 SizeBytes = file.Length,
                 CurrentVersion = 1,
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow, // fecha de subida
+                DocumentDate = parsedDocDate, // ✅ Guardamos la fecha oficial si existe
+                MetadataJson = JsonSerializer.Serialize(new
+                {
+                    DocumentDate = parsedDocDate,
+                    UploadedBy = User.Identity?.Name ?? "anon"
+                })
             };
 
             _db.Documents.Add(doc);
             await _db.SaveChangesAsync();
 
-            return Ok(new { message = "Archivo subido", docId = doc.Id, objectName });
+            return Ok(new { message = "Archivo subido", docId = doc.Id, objectName = doc.ObjectName });
         }
 
-        // 🔐 Requiere token JWT
+        // ==========================================================
+        // 🔐 Listado simple
+        // ==========================================================
         [HttpGet("list")]
         [Authorize]
         public IActionResult ListDocuments()
@@ -68,10 +93,100 @@ namespace DmsContayPerezIPS.API.Controllers
                 d.OriginalName,
                 d.ContentType,
                 d.SizeBytes,
-                d.CreatedAt
+                d.CreatedAt,
+                d.DocumentDate
             });
 
             return Ok(docs);
+        }
+
+        // ==========================================================
+        // 🔐 Descarga de documento
+        // ==========================================================
+        [HttpGet("download/{id}")]
+        [Authorize]
+        public async Task<IActionResult> Download(long id)
+        {
+            var doc = _db.Documents.FirstOrDefault(d => d.Id == id);
+            if (doc == null) return NotFound("Documento no encontrado");
+
+            var ms = new MemoryStream();
+
+            await _minio.GetObjectAsync(new GetObjectArgs()
+                .WithBucket(_bucket)
+                .WithObject(doc.ObjectName) // ✅ ahora coincide con lo guardado
+                .WithCallbackStream(stream => stream.CopyTo(ms)));
+
+            ms.Position = 0;
+            return File(ms, doc.ContentType, doc.OriginalName);
+        }
+
+        // ==========================================================
+        // 🔐 Búsqueda avanzada
+        // ==========================================================
+        [HttpGet("search")]
+        [Authorize]
+        public IActionResult Search(
+            string? name,
+            DateTime? fromUpload,
+            DateTime? toUpload,
+            string? fromDoc,
+            string? toDoc,
+            long? serieId,
+            long? subserieId,
+            long? tipoDocId,
+            string? tag,
+            string? metadata)
+        {
+            var query = _db.Documents.AsQueryable();
+
+            // Buscar por nombre
+            if (!string.IsNullOrWhiteSpace(name))
+                query = query.Where(d => d.OriginalName.ToLower().Contains(name.ToLower()));
+
+            // Rango de subida
+            if (fromUpload.HasValue) query = query.Where(d => d.CreatedAt >= fromUpload.Value);
+            if (toUpload.HasValue) query = query.Where(d => d.CreatedAt <= toUpload.Value);
+
+            // Rango de fecha real del documento (campo DocumentDate)
+            if (!string.IsNullOrWhiteSpace(fromDoc) && SpanishDateParser.TryParse(fromDoc, out var fdoc))
+                query = query.Where(d => d.DocumentDate >= fdoc);
+
+            if (!string.IsNullOrWhiteSpace(toDoc) && SpanishDateParser.TryParse(toDoc, out var tdoc))
+                query = query.Where(d => d.DocumentDate <= tdoc);
+
+            // Filtrar TRD
+            if (tipoDocId.HasValue)
+                query = query.Where(d => d.TipoDocId == tipoDocId.Value);
+            else if (subserieId.HasValue)
+                query = query.Where(d => d.TipoDocumental!.SubserieId == subserieId.Value);
+            else if (serieId.HasValue)
+                query = query.Where(d => d.TipoDocumental!.Subserie!.SerieId == serieId.Value);
+
+            // Tags
+            if (!string.IsNullOrWhiteSpace(tag))
+                query = query.Where(d => d.DocumentTags!.Any(dt => dt.Tag.Name.ToLower().Contains(tag.ToLower())));
+
+            // Metadata libre
+            if (!string.IsNullOrWhiteSpace(metadata))
+                query = query.Where(d => d.MetadataJson != null && d.MetadataJson.ToLower().Contains(metadata.ToLower()));
+
+            var results = query.Select(d => new
+            {
+                d.Id,
+                d.OriginalName,
+                d.ContentType,
+                d.SizeBytes,
+                d.CreatedAt,
+                d.DocumentDate,
+                Tipo = d.TipoDocumental != null ? d.TipoDocumental.Nombre : null,
+                Subserie = d.TipoDocumental!.Subserie != null ? d.TipoDocumental.Subserie.Nombre : null,
+                Serie = d.TipoDocumental!.Subserie!.Serie != null ? d.TipoDocumental.Subserie.Serie.Nombre : null,
+                Tags = d.DocumentTags!.Select(t => t.Tag.Name).ToList(),
+                d.MetadataJson
+            }).ToList();
+
+            return Ok(results);
         }
     }
 }

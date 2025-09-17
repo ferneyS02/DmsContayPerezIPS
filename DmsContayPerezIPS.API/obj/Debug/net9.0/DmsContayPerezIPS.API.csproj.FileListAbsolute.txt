@@ -10,6 +10,18 @@ C:\Users\Ferney\source\repos\DmsContayPerezIPS\DmsContayPerezIPS.API\bin\Debug\n
 C:\Users\Ferney\source\repos\DmsContayPerezIPS\DmsContayPerezIPS.API\bin\Debug\net9.0\CommunityToolkit.HighPerformance.dll
 C:\Users\Ferney\source\repos\DmsContayPerezIPS\DmsContayPerezIPS.API\bin\Debug\net9.0\DotNetEnv.dll
 C:\Users\Ferney\source\repos\DmsContayPerezIPS\DmsContayPerezIPS.API\bin\Debug\net9.0\Humanizer.dll
+C:\Users\Ferney\source\repos\DmsContayPerezIPS\DmsContayPerezIPS.API\bin\Debug\net9.0\itext.barcodes.dll
+C:\Users\Ferney\source\repos\DmsContayPerezIPS\DmsContayPerezIPS.API\bin\Debug\net9.0\itext.bouncy-castle-connector.dll
+C:\Users\Ferney\source\repos\DmsContayPerezIPS\DmsContayPerezIPS.API\bin\Debug\net9.0\itext.forms.dll
+C:\Users\Ferney\source\repos\DmsContayPerezIPS\DmsContayPerezIPS.API\bin\Debug\net9.0\itext.io.dll
+C:\Users\Ferney\source\repos\DmsContayPerezIPS\DmsContayPerezIPS.API\bin\Debug\net9.0\itext.kernel.dll
+C:\Users\Ferney\source\repos\DmsContayPerezIPS\DmsContayPerezIPS.API\bin\Debug\net9.0\itext.layout.dll
+C:\Users\Ferney\source\repos\DmsContayPerezIPS\DmsContayPerezIPS.API\bin\Debug\net9.0\itext.pdfa.dll
+C:\Users\Ferney\source\repos\DmsContayPerezIPS\DmsContayPerezIPS.API\bin\Debug\net9.0\itext.pdfua.dll
+C:\Users\Ferney\source\repos\DmsContayPerezIPS\DmsContayPerezIPS.API\bin\Debug\net9.0\itext.sign.dll
+C:\Users\Ferney\source\repos\DmsContayPerezIPS\DmsContayPerezIPS.API\bin\Debug\net9.0\itext.styledxmlparser.dll
+C:\Users\Ferney\source\repos\DmsContayPerezIPS\DmsContayPerezIPS.API\bin\Debug\net9.0\itext.svg.dll
+C:\Users\Ferney\source\repos\DmsContayPerezIPS\DmsContayPerezIPS.API\bin\Debug\net9.0\itext.commons.dll
 C:\Users\Ferney\source\repos\DmsContayPerezIPS\DmsContayPerezIPS.API\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\Ferney\source\repos\DmsContayPerezIPS\DmsContayPerezIPS.API\bin\Debug\net9.0\Microsoft.AspNetCore.OpenApi.dll
 C:\Users\Ferney\source\repos\DmsContayPerezIPS\DmsContayPerezIPS.API\bin\Debug\net9.0\Microsoft.Bcl.AsyncInterfaces.dll
@@ -20,6 +32,7 @@ C:\Users\Ferney\source\repos\DmsContayPerezIPS\DmsContayPerezIPS.API\bin\Debug\n
 C:\Users\Ferney\source\repos\DmsContayPerezIPS\DmsContayPerezIPS.API\bin\Debug\net9.0\Microsoft.CodeAnalysis.Workspaces.dll
 C:\Users\Ferney\source\repos\DmsContayPerezIPS\DmsContayPerezIPS.API\bin\Debug\net9.0\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.dll
 C:\Users\Ferney\source\repos\DmsContayPerezIPS\DmsContayPerezIPS.API\bin\Debug\net9.0\Microsoft.CodeAnalysis.Workspaces.MSBuild.dll
+C:\Users\Ferney\source\repos\DmsContayPerezIPS\DmsContayPerezIPS.API\bin\Debug\net9.0\Microsoft.DotNet.PlatformAbstractions.dll
 C:\Users\Ferney\source\repos\DmsContayPerezIPS\DmsContayPerezIPS.API\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.dll
 C:\Users\Ferney\source\repos\DmsContayPerezIPS\DmsContayPerezIPS.API\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.Abstractions.dll
 C:\Users\Ferney\source\repos\DmsContayPerezIPS\DmsContayPerezIPS.API\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.Design.dll

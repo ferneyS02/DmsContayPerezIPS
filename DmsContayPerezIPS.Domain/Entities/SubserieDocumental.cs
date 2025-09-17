@@ -1,4 +1,6 @@
-﻿namespace DmsContayPerezIPS.Domain.Entities
+﻿using DmsContayPerezIPS.Domain.Enums;
+
+namespace DmsContayPerezIPS.Domain.Entities
 {
     public class SubserieDocumental
     {
@@ -12,19 +14,27 @@
         public string Nombre { get; set; } = null!;
 
         // 📌 Relación con Tipos Documentales
-        public ICollection<TipoDocumental>? Tipos { get; set; }
+        public ICollection<TipoDocumental>? TiposDocumentales { get; set; }
 
         // =========================
         // 🔹 Campos de TRD
         // =========================
 
         // Retención en archivo de gestión (en años)
-        public int RetencionGestion { get; set; }
+        public short RetencionGestion { get; set; }
 
         // Retención en archivo central (en años)
-        public int RetencionCentral { get; set; }
+        public short RetencionCentral { get; set; }
 
-        // Disposición final (Conservación total, Eliminación, Sustitución, etc.)
-        public string DisposicionFinal { get; set; } = "Eliminación";
+        // Disposición final (enum: CT, E, S, M)
+        public DisposicionFinalEnum DisposicionFinal { get; set; } = DisposicionFinalEnum.E;
+
+        // =========================
+        // 🔹 Auditoría
+        // =========================
+        public long? CreatedBy { get; set; }
+        public DateTime CreatedAt { get; set; }   // ⚡ sin valor dinámico
+        public long? UpdatedBy { get; set; }
+        public DateTime? UpdatedAt { get; set; }
     }
 }

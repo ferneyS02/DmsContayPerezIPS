@@ -1,4 +1,5 @@
 using DmsContayPerezIPS.Infrastructure.Persistence;
+using DmsContayPerezIPS.Infrastructure.Seed;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -45,7 +46,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-// ===== Swagger =====
+// ===== Controllers + Swagger =====
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
@@ -86,10 +87,11 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
-// ===== Crear bucket automáticamente en MinIO =====
+// ===== Crear bucket, ejecutar migraciones y seeding =====
 using (var scope = app.Services.CreateScope())
 {
     var minio = scope.ServiceProvider.GetRequiredService<IMinioClient>();
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     var bucket = builder.Configuration["MinIO:Bucket"] ?? "dms";
 
     try
@@ -107,8 +109,14 @@ using (var scope = app.Services.CreateScope())
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"? Error creando/verificando bucket en MinIO: {ex.Message}");
+        Console.WriteLine($"?? Error creando/verificando bucket en MinIO: {ex.Message}");
     }
+
+    // ?? Ejecutar migraciones
+    await db.Database.MigrateAsync();
+
+    // ?? Ejecutar seeding (roles + admin + bucket)
+    await SeederService.SeedAsync(db, minio, bucket);
 }
 
 // ===== Middlewares =====
@@ -121,6 +129,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllers();
 
 app.Run();
