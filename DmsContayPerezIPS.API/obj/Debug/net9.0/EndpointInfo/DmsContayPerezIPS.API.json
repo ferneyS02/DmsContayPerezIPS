@@ -77,6 +77,14 @@
         ],
         "parameters": [
           {
+            "name": "tipoDocId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
             "name": "documentDate",
             "in": "query",
             "schema": {

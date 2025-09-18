@@ -147,6 +147,11 @@
         "IsRequired": false
       },
       {
+        "Name": "tipoDocId",
+        "Type": "System.Int64",
+        "IsRequired": false
+      },
+      {
         "Name": "documentDate",
         "Type": "System.String",
         "IsRequired": false

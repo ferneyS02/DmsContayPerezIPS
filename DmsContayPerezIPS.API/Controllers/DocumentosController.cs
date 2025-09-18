@@ -29,12 +29,17 @@ namespace DmsContayPerezIPS.API.Controllers
         // ==========================================================
         [HttpPost("upload")]
         [Authorize]
-        public async Task<IActionResult> Upload(IFormFile file, string? documentDate = null)
+        public async Task<IActionResult> Upload(IFormFile file, long tipoDocId, string? documentDate = null)
         {
             if (file == null || file.Length == 0)
                 return BadRequest("Archivo inválido");
 
-            // Verificar/crear bucket
+            // Validar que el TipoDocumental exista
+            var tipoDoc = await _db.TiposDocumentales.FindAsync(tipoDocId);
+            if (tipoDoc == null)
+                return BadRequest("El tipo documental no existe");
+
+            // Verificar/crear bucket en MinIO
             bool bucketExists = await _minio.BucketExistsAsync(new BucketExistsArgs().WithBucket(_bucket));
             if (!bucketExists)
                 await _minio.MakeBucketAsync(new MakeBucketArgs().WithBucket(_bucket));
@@ -59,22 +64,23 @@ namespace DmsContayPerezIPS.API.Controllers
             {
                 if (SpanishDateParser.TryParse(documentDate, out var parsed))
                 {
-                    // Forzar a Unspecified para que sea compatible con "timestamp without time zone"
                     parsedDocDate = DateTime.SpecifyKind(parsed, DateTimeKind.Unspecified);
                 }
             }
 
             var createdAt = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Unspecified);
 
+            // Crear documento y asignar TipoDocId
             var doc = new Document
             {
                 OriginalName = file.FileName,
-                ObjectName = objectName,   // ✅ Guardamos cómo se llama en MinIO
+                ObjectName = objectName,
                 ContentType = file.ContentType,
                 SizeBytes = file.Length,
                 CurrentVersion = 1,
-                CreatedAt = createdAt,     // ✅ Fecha de subida normalizada
-                DocumentDate = parsedDocDate, // ✅ Fecha oficial si existe, también normalizada
+                CreatedAt = createdAt,
+                DocumentDate = parsedDocDate,
+                TipoDocId = tipoDocId, // 🔹 Asignación obligatoria
                 MetadataJson = JsonSerializer.Serialize(new
                 {
                     DocumentDate = parsedDocDate,
@@ -122,7 +128,7 @@ namespace DmsContayPerezIPS.API.Controllers
 
             await _minio.GetObjectAsync(new GetObjectArgs()
                 .WithBucket(_bucket)
-                .WithObject(doc.ObjectName) // ✅ ahora coincide con lo guardado
+                .WithObject(doc.ObjectName)
                 .WithCallbackStream(stream => stream.CopyTo(ms)));
 
             ms.Position = 0;
@@ -148,22 +154,18 @@ namespace DmsContayPerezIPS.API.Controllers
         {
             var query = _db.Documents.AsQueryable();
 
-            // Buscar por nombre
             if (!string.IsNullOrWhiteSpace(name))
                 query = query.Where(d => d.OriginalName.ToLower().Contains(name.ToLower()));
 
-            // Rango de subida
             if (fromUpload.HasValue) query = query.Where(d => d.CreatedAt >= fromUpload.Value);
             if (toUpload.HasValue) query = query.Where(d => d.CreatedAt <= toUpload.Value);
 
-            // Rango de fecha real del documento (campo DocumentDate)
             if (!string.IsNullOrWhiteSpace(fromDoc) && SpanishDateParser.TryParse(fromDoc, out var fdoc))
                 query = query.Where(d => d.DocumentDate >= DateTime.SpecifyKind(fdoc, DateTimeKind.Unspecified));
 
             if (!string.IsNullOrWhiteSpace(toDoc) && SpanishDateParser.TryParse(toDoc, out var tdoc))
                 query = query.Where(d => d.DocumentDate <= DateTime.SpecifyKind(tdoc, DateTimeKind.Unspecified));
 
-            // Filtrar TRD
             if (tipoDocId.HasValue)
                 query = query.Where(d => d.TipoDocId == tipoDocId.Value);
             else if (subserieId.HasValue)
@@ -171,11 +173,9 @@ namespace DmsContayPerezIPS.API.Controllers
             else if (serieId.HasValue)
                 query = query.Where(d => d.TipoDocumental!.Subserie!.SerieId == serieId.Value);
 
-            // Tags
             if (!string.IsNullOrWhiteSpace(tag))
                 query = query.Where(d => d.DocumentTags!.Any(dt => dt.Tag.Name.ToLower().Contains(tag.ToLower())));
 
-            // Metadata libre
             if (!string.IsNullOrWhiteSpace(metadata))
                 query = query.Where(d => d.MetadataJson != null && d.MetadataJson.ToLower().Contains(metadata.ToLower()));
 
@@ -189,7 +189,7 @@ namespace DmsContayPerezIPS.API.Controllers
                 d.DocumentDate,
                 Tipo = d.TipoDocumental != null ? d.TipoDocumental.Nombre : null,
                 Subserie = d.TipoDocumental!.Subserie != null ? d.TipoDocumental.Subserie.Nombre : null,
-                Serie = d.TipoDocumental!.Subserie!.Serie != null ? d.TipoDocumental.Subserie.Serie.Nombre : null,
+                Serie = d.TipoDocumental!.Subserie!.Serie.Nombre,
                 Tags = d.DocumentTags!.Select(t => t.Tag.Name).ToList(),
                 d.MetadataJson
             }).ToList();

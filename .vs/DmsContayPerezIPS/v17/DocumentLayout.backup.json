@@ -56,7 +56,7 @@
               "RelativeDocumentMoniker": "DmsContayPerezIPS.API\\Controllers\\DocumentosController.cs",
               "ToolTip": "C:\\Users\\Ferney\\source\\repos\\DmsContayPerezIPS\\DmsContayPerezIPS.API\\Controllers\\DocumentosController.cs",
               "RelativeToolTip": "DmsContayPerezIPS.API\\Controllers\\DocumentosController.cs",
-              "ViewState": "AgIAAFEAAAAAAAAAAAAowF8AAAAsAAAAAAAAAA==",
+              "ViewState": "AgIAALEAAAAAAAAAAAAMwMIAAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-17T22:43:26.069Z",
               "EditorCaption": ""
@@ -71,8 +71,7 @@
               "RelativeToolTip": "DmsContayPerezIPS.Infrastructure\\Migrations\\20250917221557_InitialCreate.cs",
               "ViewState": "AgIAAMwBAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-17T22:15:57.769Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-17T22:15:57.769Z"
             },
             {
               "$type": "Document",
