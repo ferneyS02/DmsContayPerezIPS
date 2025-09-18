@@ -51,12 +51,20 @@ namespace DmsContayPerezIPS.API.Controllers
                     .WithContentType(file.ContentType));
             }
 
+            // ==========================================================
+            // ✅ Parseo y normalización de fechas
+            // ==========================================================
             DateTime? parsedDocDate = null;
             if (!string.IsNullOrWhiteSpace(documentDate))
             {
                 if (SpanishDateParser.TryParse(documentDate, out var parsed))
-                    parsedDocDate = parsed;
+                {
+                    // Forzar a Unspecified para que sea compatible con "timestamp without time zone"
+                    parsedDocDate = DateTime.SpecifyKind(parsed, DateTimeKind.Unspecified);
+                }
             }
+
+            var createdAt = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Unspecified);
 
             var doc = new Document
             {
@@ -65,8 +73,8 @@ namespace DmsContayPerezIPS.API.Controllers
                 ContentType = file.ContentType,
                 SizeBytes = file.Length,
                 CurrentVersion = 1,
-                CreatedAt = DateTime.UtcNow, // fecha de subida
-                DocumentDate = parsedDocDate, // ✅ Guardamos la fecha oficial si existe
+                CreatedAt = createdAt,     // ✅ Fecha de subida normalizada
+                DocumentDate = parsedDocDate, // ✅ Fecha oficial si existe, también normalizada
                 MetadataJson = JsonSerializer.Serialize(new
                 {
                     DocumentDate = parsedDocDate,
@@ -150,10 +158,10 @@ namespace DmsContayPerezIPS.API.Controllers
 
             // Rango de fecha real del documento (campo DocumentDate)
             if (!string.IsNullOrWhiteSpace(fromDoc) && SpanishDateParser.TryParse(fromDoc, out var fdoc))
-                query = query.Where(d => d.DocumentDate >= fdoc);
+                query = query.Where(d => d.DocumentDate >= DateTime.SpecifyKind(fdoc, DateTimeKind.Unspecified));
 
             if (!string.IsNullOrWhiteSpace(toDoc) && SpanishDateParser.TryParse(toDoc, out var tdoc))
-                query = query.Where(d => d.DocumentDate <= tdoc);
+                query = query.Where(d => d.DocumentDate <= DateTime.SpecifyKind(tdoc, DateTimeKind.Unspecified));
 
             // Filtrar TRD
             if (tipoDocId.HasValue)
