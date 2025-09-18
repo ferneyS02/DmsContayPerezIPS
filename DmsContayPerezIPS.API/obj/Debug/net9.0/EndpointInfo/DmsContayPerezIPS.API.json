@@ -243,6 +243,18 @@
         }
       }
     },
+    "/api/TiposDocumentales/list": {
+      "get": {
+        "tags": [
+          "TiposDocumentales"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/TRD/series": {
       "get": {
         "tags": [

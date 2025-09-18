@@ -398,6 +398,16 @@ namespace DmsContayPerezIPS.Infrastructure.Migrations
                         {
                             Id = 3L,
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisposicionFinal = "E",
+                            Nombre = "Capacitaciones médicas",
+                            RetencionCentral = (short)0,
+                            RetencionGestion = (short)5,
+                            SerieId = 1L
+                        },
+                        new
+                        {
+                            Id = 4L,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisposicionFinal = "CT",
                             Nombre = "Contratos laborales",
                             RetencionCentral = (short)10,
@@ -406,7 +416,7 @@ namespace DmsContayPerezIPS.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = 4L,
+                            Id = 5L,
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisposicionFinal = "E",
                             Nombre = "Correspondencia",
@@ -416,7 +426,17 @@ namespace DmsContayPerezIPS.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = 5L,
+                            Id = 6L,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisposicionFinal = "E",
+                            Nombre = "Capacitaciones administrativas",
+                            RetencionCentral = (short)0,
+                            RetencionGestion = (short)5,
+                            SerieId = 2L
+                        },
+                        new
+                        {
+                            Id = 7L,
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisposicionFinal = "CT",
                             Nombre = "Estados financieros",
@@ -426,7 +446,7 @@ namespace DmsContayPerezIPS.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = 6L,
+                            Id = 8L,
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisposicionFinal = "E",
                             Nombre = "Facturas",
@@ -436,7 +456,17 @@ namespace DmsContayPerezIPS.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = 7L,
+                            Id = 9L,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisposicionFinal = "E",
+                            Nombre = "Capacitaciones contables",
+                            RetencionCentral = (short)0,
+                            RetencionGestion = (short)5,
+                            SerieId = 3L
+                        },
+                        new
+                        {
+                            Id = 10L,
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisposicionFinal = "CT",
                             Nombre = "Procesos judiciales",
@@ -446,7 +476,17 @@ namespace DmsContayPerezIPS.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = 8L,
+                            Id = 11L,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisposicionFinal = "E",
+                            Nombre = "Capacitaciones jurídicas",
+                            RetencionCentral = (short)0,
+                            RetencionGestion = (short)5,
+                            SerieId = 4L
+                        },
+                        new
+                        {
+                            Id = 12L,
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisposicionFinal = "S",
                             Nombre = "Manuales de procesos",
@@ -456,7 +496,7 @@ namespace DmsContayPerezIPS.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = 9L,
+                            Id = 13L,
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisposicionFinal = "E",
                             Nombre = "Registros de calidad",
@@ -466,7 +506,17 @@ namespace DmsContayPerezIPS.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = 10L,
+                            Id = 14L,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisposicionFinal = "E",
+                            Nombre = "Capacitaciones en calidad",
+                            RetencionCentral = (short)0,
+                            RetencionGestion = (short)5,
+                            SerieId = 5L
+                        },
+                        new
+                        {
+                            Id = 15L,
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisposicionFinal = "CT",
                             Nombre = "Accidentes laborales",
@@ -476,7 +526,7 @@ namespace DmsContayPerezIPS.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = 11L,
+                            Id = 16L,
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisposicionFinal = "E",
                             Nombre = "Capacitaciones SST",
@@ -486,7 +536,7 @@ namespace DmsContayPerezIPS.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = 12L,
+                            Id = 17L,
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisposicionFinal = "M",
                             Nombre = "Hojas de vida de equipos",
@@ -496,10 +546,20 @@ namespace DmsContayPerezIPS.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = 13L,
+                            Id = 18L,
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisposicionFinal = "E",
                             Nombre = "Mantenimientos",
+                            RetencionCentral = (short)0,
+                            RetencionGestion = (short)5,
+                            SerieId = 7L
+                        },
+                        new
+                        {
+                            Id = 19L,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisposicionFinal = "E",
+                            Nombre = "Capacitaciones en equipos biomédicos",
                             RetencionCentral = (short)0,
                             RetencionGestion = (short)5,
                             SerieId = 7L
@@ -632,9 +692,9 @@ namespace DmsContayPerezIPS.Infrastructure.Migrations
                         {
                             Id = 6L,
                             CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DisposicionFinal = "CT",
+                            DisposicionFinal = "E",
                             IsActive = true,
-                            Nombre = "Contrato firmado",
+                            Nombre = "Lista de asistencia",
                             RetencionCentral = (short)0,
                             RetencionGestion = (short)0,
                             SubserieId = 3L
@@ -643,9 +703,9 @@ namespace DmsContayPerezIPS.Infrastructure.Migrations
                         {
                             Id = 7L,
                             CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DisposicionFinal = "CT",
+                            DisposicionFinal = "E",
                             IsActive = true,
-                            Nombre = "Acta de terminación",
+                            Nombre = "Material entregado",
                             RetencionCentral = (short)0,
                             RetencionGestion = (short)0,
                             SubserieId = 3L
@@ -656,18 +716,18 @@ namespace DmsContayPerezIPS.Infrastructure.Migrations
                             CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisposicionFinal = "E",
                             IsActive = true,
-                            Nombre = "Carta enviada",
+                            Nombre = "Certificados de participación",
                             RetencionCentral = (short)0,
                             RetencionGestion = (short)0,
-                            SubserieId = 4L
+                            SubserieId = 3L
                         },
                         new
                         {
                             Id = 9L,
                             CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DisposicionFinal = "E",
+                            DisposicionFinal = "CT",
                             IsActive = true,
-                            Nombre = "Carta recibida",
+                            Nombre = "Contrato firmado",
                             RetencionCentral = (short)0,
                             RetencionGestion = (short)0,
                             SubserieId = 4L
@@ -678,18 +738,18 @@ namespace DmsContayPerezIPS.Infrastructure.Migrations
                             CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisposicionFinal = "CT",
                             IsActive = true,
-                            Nombre = "Balance general",
+                            Nombre = "Acta de terminación",
                             RetencionCentral = (short)0,
                             RetencionGestion = (short)0,
-                            SubserieId = 5L
+                            SubserieId = 4L
                         },
                         new
                         {
                             Id = 11L,
                             CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DisposicionFinal = "CT",
+                            DisposicionFinal = "E",
                             IsActive = true,
-                            Nombre = "Estado de resultados",
+                            Nombre = "Carta enviada",
                             RetencionCentral = (short)0,
                             RetencionGestion = (short)0,
                             SubserieId = 5L
@@ -700,10 +760,10 @@ namespace DmsContayPerezIPS.Infrastructure.Migrations
                             CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisposicionFinal = "E",
                             IsActive = true,
-                            Nombre = "Factura de proveedor",
+                            Nombre = "Carta recibida",
                             RetencionCentral = (short)0,
                             RetencionGestion = (short)0,
-                            SubserieId = 6L
+                            SubserieId = 5L
                         },
                         new
                         {
@@ -711,7 +771,7 @@ namespace DmsContayPerezIPS.Infrastructure.Migrations
                             CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisposicionFinal = "E",
                             IsActive = true,
-                            Nombre = "Factura de cliente",
+                            Nombre = "Lista de asistencia",
                             RetencionCentral = (short)0,
                             RetencionGestion = (short)0,
                             SubserieId = 6L
@@ -720,60 +780,126 @@ namespace DmsContayPerezIPS.Infrastructure.Migrations
                         {
                             Id = 14L,
                             CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DisposicionFinal = "CT",
+                            DisposicionFinal = "E",
                             IsActive = true,
-                            Nombre = "Demanda",
+                            Nombre = "Material entregado",
                             RetencionCentral = (short)0,
                             RetencionGestion = (short)0,
-                            SubserieId = 7L
+                            SubserieId = 6L
                         },
                         new
                         {
                             Id = 15L,
                             CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisposicionFinal = "E",
+                            IsActive = true,
+                            Nombre = "Certificados de participación",
+                            RetencionCentral = (short)0,
+                            RetencionGestion = (short)0,
+                            SubserieId = 6L
+                        },
+                        new
+                        {
+                            Id = 16L,
+                            CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisposicionFinal = "CT",
                             IsActive = true,
-                            Nombre = "Sentencia",
+                            Nombre = "Balance general",
                             RetencionCentral = (short)0,
                             RetencionGestion = (short)0,
                             SubserieId = 7L
                         },
                         new
                         {
-                            Id = 16L,
+                            Id = 17L,
                             CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DisposicionFinal = "S",
+                            DisposicionFinal = "CT",
                             IsActive = true,
-                            Nombre = "Manual de calidad",
+                            Nombre = "Estado de resultados",
+                            RetencionCentral = (short)0,
+                            RetencionGestion = (short)0,
+                            SubserieId = 7L
+                        },
+                        new
+                        {
+                            Id = 18L,
+                            CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisposicionFinal = "E",
+                            IsActive = true,
+                            Nombre = "Factura de proveedor",
                             RetencionCentral = (short)0,
                             RetencionGestion = (short)0,
                             SubserieId = 8L
                         },
                         new
                         {
-                            Id = 17L,
+                            Id = 19L,
                             CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisposicionFinal = "E",
                             IsActive = true,
-                            Nombre = "Registro de auditoría interna",
+                            Nombre = "Factura de cliente",
+                            RetencionCentral = (short)0,
+                            RetencionGestion = (short)0,
+                            SubserieId = 8L
+                        },
+                        new
+                        {
+                            Id = 20L,
+                            CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisposicionFinal = "E",
+                            IsActive = true,
+                            Nombre = "Lista de asistencia",
                             RetencionCentral = (short)0,
                             RetencionGestion = (short)0,
                             SubserieId = 9L
                         },
                         new
                         {
-                            Id = 18L,
+                            Id = 21L,
+                            CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisposicionFinal = "E",
+                            IsActive = true,
+                            Nombre = "Material entregado",
+                            RetencionCentral = (short)0,
+                            RetencionGestion = (short)0,
+                            SubserieId = 9L
+                        },
+                        new
+                        {
+                            Id = 22L,
+                            CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisposicionFinal = "E",
+                            IsActive = true,
+                            Nombre = "Certificados de participación",
+                            RetencionCentral = (short)0,
+                            RetencionGestion = (short)0,
+                            SubserieId = 9L
+                        },
+                        new
+                        {
+                            Id = 23L,
                             CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisposicionFinal = "CT",
                             IsActive = true,
-                            Nombre = "Reporte de accidente",
+                            Nombre = "Demanda",
                             RetencionCentral = (short)0,
                             RetencionGestion = (short)0,
                             SubserieId = 10L
                         },
                         new
                         {
-                            Id = 19L,
+                            Id = 24L,
+                            CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisposicionFinal = "CT",
+                            IsActive = true,
+                            Nombre = "Sentencia",
+                            RetencionCentral = (short)0,
+                            RetencionGestion = (short)0,
+                            SubserieId = 10L
+                        },
+                        new
+                        {
+                            Id = 25L,
                             CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisposicionFinal = "E",
                             IsActive = true,
@@ -784,36 +910,190 @@ namespace DmsContayPerezIPS.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = 20L,
+                            Id = 26L,
                             CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DisposicionFinal = "M",
+                            DisposicionFinal = "E",
                             IsActive = true,
-                            Nombre = "Ficha técnica del equipo",
+                            Nombre = "Material entregado",
+                            RetencionCentral = (short)0,
+                            RetencionGestion = (short)0,
+                            SubserieId = 11L
+                        },
+                        new
+                        {
+                            Id = 27L,
+                            CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisposicionFinal = "E",
+                            IsActive = true,
+                            Nombre = "Certificados de participación",
+                            RetencionCentral = (short)0,
+                            RetencionGestion = (short)0,
+                            SubserieId = 11L
+                        },
+                        new
+                        {
+                            Id = 28L,
+                            CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisposicionFinal = "S",
+                            IsActive = true,
+                            Nombre = "Manual de calidad",
                             RetencionCentral = (short)0,
                             RetencionGestion = (short)0,
                             SubserieId = 12L
                         },
                         new
                         {
-                            Id = 21L,
+                            Id = 29L,
                             CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisposicionFinal = "E",
                             IsActive = true,
-                            Nombre = "Reporte de mantenimiento preventivo",
+                            Nombre = "Registro de auditoría interna",
                             RetencionCentral = (short)0,
                             RetencionGestion = (short)0,
                             SubserieId = 13L
                         },
                         new
                         {
-                            Id = 22L,
+                            Id = 30L,
+                            CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisposicionFinal = "E",
+                            IsActive = true,
+                            Nombre = "Lista de asistencia",
+                            RetencionCentral = (short)0,
+                            RetencionGestion = (short)0,
+                            SubserieId = 14L
+                        },
+                        new
+                        {
+                            Id = 31L,
+                            CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisposicionFinal = "E",
+                            IsActive = true,
+                            Nombre = "Material entregado",
+                            RetencionCentral = (short)0,
+                            RetencionGestion = (short)0,
+                            SubserieId = 14L
+                        },
+                        new
+                        {
+                            Id = 32L,
+                            CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisposicionFinal = "E",
+                            IsActive = true,
+                            Nombre = "Certificados de participación",
+                            RetencionCentral = (short)0,
+                            RetencionGestion = (short)0,
+                            SubserieId = 14L
+                        },
+                        new
+                        {
+                            Id = 33L,
+                            CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisposicionFinal = "CT",
+                            IsActive = true,
+                            Nombre = "Reporte de accidente",
+                            RetencionCentral = (short)0,
+                            RetencionGestion = (short)0,
+                            SubserieId = 15L
+                        },
+                        new
+                        {
+                            Id = 34L,
+                            CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisposicionFinal = "E",
+                            IsActive = true,
+                            Nombre = "Lista de asistencia",
+                            RetencionCentral = (short)0,
+                            RetencionGestion = (short)0,
+                            SubserieId = 16L
+                        },
+                        new
+                        {
+                            Id = 35L,
+                            CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisposicionFinal = "E",
+                            IsActive = true,
+                            Nombre = "Material entregado",
+                            RetencionCentral = (short)0,
+                            RetencionGestion = (short)0,
+                            SubserieId = 16L
+                        },
+                        new
+                        {
+                            Id = 36L,
+                            CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisposicionFinal = "E",
+                            IsActive = true,
+                            Nombre = "Certificados de participación",
+                            RetencionCentral = (short)0,
+                            RetencionGestion = (short)0,
+                            SubserieId = 16L
+                        },
+                        new
+                        {
+                            Id = 37L,
+                            CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisposicionFinal = "M",
+                            IsActive = true,
+                            Nombre = "Ficha técnica del equipo",
+                            RetencionCentral = (short)0,
+                            RetencionGestion = (short)0,
+                            SubserieId = 17L
+                        },
+                        new
+                        {
+                            Id = 38L,
+                            CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisposicionFinal = "E",
+                            IsActive = true,
+                            Nombre = "Reporte de mantenimiento preventivo",
+                            RetencionCentral = (short)0,
+                            RetencionGestion = (short)0,
+                            SubserieId = 18L
+                        },
+                        new
+                        {
+                            Id = 39L,
                             CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisposicionFinal = "E",
                             IsActive = true,
                             Nombre = "Reporte de mantenimiento correctivo",
                             RetencionCentral = (short)0,
                             RetencionGestion = (short)0,
-                            SubserieId = 13L
+                            SubserieId = 18L
+                        },
+                        new
+                        {
+                            Id = 40L,
+                            CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisposicionFinal = "E",
+                            IsActive = true,
+                            Nombre = "Lista de asistencia",
+                            RetencionCentral = (short)0,
+                            RetencionGestion = (short)0,
+                            SubserieId = 19L
+                        },
+                        new
+                        {
+                            Id = 41L,
+                            CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisposicionFinal = "E",
+                            IsActive = true,
+                            Nombre = "Material entregado",
+                            RetencionCentral = (short)0,
+                            RetencionGestion = (short)0,
+                            SubserieId = 19L
+                        },
+                        new
+                        {
+                            Id = 42L,
+                            CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisposicionFinal = "E",
+                            IsActive = true,
+                            Nombre = "Certificados de participación",
+                            RetencionCentral = (short)0,
+                            RetencionGestion = (short)0,
+                            SubserieId = 19L
                         });
                 });
 

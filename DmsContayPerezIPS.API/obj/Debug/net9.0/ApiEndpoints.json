@@ -160,6 +160,16 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "DmsContayPerezIPS.API.Controllers.TiposDocumentalesController",
+    "Method": "List",
+    "RelativePath": "api/TiposDocumentales/list",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "DmsContayPerezIPS.API.Controllers.TRDController",
     "Method": "GetSeries",
     "RelativePath": "api/TRD/series",

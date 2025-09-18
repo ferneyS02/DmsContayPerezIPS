@@ -170,12 +170,12 @@ namespace DmsContayPerezIPS.API.Controllers
             if (tipoDocId.HasValue)
                 query = query.Where(d => d.TipoDocId == tipoDocId.Value);
             else if (subserieId.HasValue)
-                query = query.Where(d => d.TipoDocumental!.SubserieId == subserieId.Value);
+                query = query.Where(d => d.TipoDocumental != null && d.TipoDocumental.SubserieId == subserieId.Value);
             else if (serieId.HasValue)
-                query = query.Where(d => d.TipoDocumental?.Subserie?.SerieId == serieId.Value); // 🔹 cambio seguro
+                query = query.Where(d => d.TipoDocumental != null && d.TipoDocumental.Subserie != null && d.TipoDocumental.Subserie.SerieId == serieId.Value);
 
             if (!string.IsNullOrWhiteSpace(tag))
-                query = query.Where(d => d.DocumentTags!.Any(dt => dt.Tag.Name.ToLower().Contains(tag.ToLower())));
+                query = query.Where(d => d.DocumentTags != null && d.DocumentTags.Any(dt => dt.Tag.Name.ToLower().Contains(tag.ToLower())));
 
             if (!string.IsNullOrWhiteSpace(metadata))
                 query = query.Where(d => d.MetadataJson != null && d.MetadataJson.ToLower().Contains(metadata.ToLower()));
@@ -188,10 +188,12 @@ namespace DmsContayPerezIPS.API.Controllers
                 d.SizeBytes,
                 d.CreatedAt,
                 d.DocumentDate,
-                Tipo = d.TipoDocumental != null ? d.TipoDocumental.Nombre : null,
-                Subserie = d.TipoDocumental?.Subserie?.Nombre,
-                Serie = d.TipoDocumental?.Subserie?.Serie?.Nombre, // 🔹 cambio seguro
-                Tags = d.DocumentTags!.Select(t => t.Tag.Name).ToList(),
+                Tipo = d.TipoDocumental == null ? null : d.TipoDocumental.Nombre,
+                Subserie = d.TipoDocumental != null && d.TipoDocumental.Subserie != null ? d.TipoDocumental.Subserie.Nombre : null,
+                Serie = d.TipoDocumental != null && d.TipoDocumental.Subserie != null && d.TipoDocumental.Subserie.Serie != null
+                    ? d.TipoDocumental.Subserie.Serie.Nombre
+                    : null,
+                Tags = d.DocumentTags != null ? d.DocumentTags.Select(t => t.Tag.Name).ToList() : new List<string>(),
                 d.MetadataJson
             }).ToList();
 
