@@ -63,9 +63,7 @@ namespace DmsContayPerezIPS.API.Controllers
             if (!string.IsNullOrWhiteSpace(documentDate))
             {
                 if (SpanishDateParser.TryParse(documentDate, out var parsed))
-                {
                     parsedDocDate = DateTime.SpecifyKind(parsed, DateTimeKind.Unspecified);
-                }
             }
 
             var createdAt = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Unspecified);
@@ -157,8 +155,11 @@ namespace DmsContayPerezIPS.API.Controllers
             if (!string.IsNullOrWhiteSpace(name))
                 query = query.Where(d => d.OriginalName.ToLower().Contains(name.ToLower()));
 
-            if (fromUpload.HasValue) query = query.Where(d => d.CreatedAt >= fromUpload.Value);
-            if (toUpload.HasValue) query = query.Where(d => d.CreatedAt <= toUpload.Value);
+            if (fromUpload.HasValue)
+                query = query.Where(d => d.CreatedAt >= fromUpload.Value);
+
+            if (toUpload.HasValue)
+                query = query.Where(d => d.CreatedAt <= toUpload.Value);
 
             if (!string.IsNullOrWhiteSpace(fromDoc) && SpanishDateParser.TryParse(fromDoc, out var fdoc))
                 query = query.Where(d => d.DocumentDate >= DateTime.SpecifyKind(fdoc, DateTimeKind.Unspecified));
@@ -171,7 +172,7 @@ namespace DmsContayPerezIPS.API.Controllers
             else if (subserieId.HasValue)
                 query = query.Where(d => d.TipoDocumental!.SubserieId == subserieId.Value);
             else if (serieId.HasValue)
-                query = query.Where(d => d.TipoDocumental!.Subserie!.SerieId == serieId.Value);
+                query = query.Where(d => d.TipoDocumental?.Subserie?.SerieId == serieId.Value); // 🔹 cambio seguro
 
             if (!string.IsNullOrWhiteSpace(tag))
                 query = query.Where(d => d.DocumentTags!.Any(dt => dt.Tag.Name.ToLower().Contains(tag.ToLower())));
@@ -188,8 +189,8 @@ namespace DmsContayPerezIPS.API.Controllers
                 d.CreatedAt,
                 d.DocumentDate,
                 Tipo = d.TipoDocumental != null ? d.TipoDocumental.Nombre : null,
-                Subserie = d.TipoDocumental!.Subserie != null ? d.TipoDocumental.Subserie.Nombre : null,
-                Serie = d.TipoDocumental!.Subserie!.Serie.Nombre,
+                Subserie = d.TipoDocumental?.Subserie?.Nombre,
+                Serie = d.TipoDocumental?.Subserie?.Serie?.Nombre, // 🔹 cambio seguro
                 Tags = d.DocumentTags!.Select(t => t.Tag.Name).ToList(),
                 d.MetadataJson
             }).ToList();
