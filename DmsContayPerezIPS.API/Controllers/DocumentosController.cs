@@ -1,11 +1,12 @@
-﻿using DmsContayPerezIPS.Domain.Entities;
+﻿using System.Text.Json;
+using DmsContayPerezIPS.Domain.Entities;
 using DmsContayPerezIPS.Infrastructure.Persistence;
-using DmsContayPerezIPS.API.Services; // 👈 para usar SpanishDateParser
+using DmsContayPerezIPS.API.Services;                 // ITextExtractor + (SpanishDateParser si lo tienes aquí)
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;                  // Include/Where/EF.Functions
 using Minio;
 using Minio.DataModel.Args;
-using System.Text.Json;
 
 namespace DmsContayPerezIPS.API.Controllers
 {
@@ -16,12 +17,18 @@ namespace DmsContayPerezIPS.API.Controllers
         private readonly AppDbContext _db;
         private readonly IMinioClient _minio;
         private readonly string _bucket;
+        private readonly ITextExtractor _textExtractor;   // ✅ extractor
 
-        public DocumentosController(AppDbContext db, IMinioClient minio, IConfiguration config)
+        public DocumentosController(
+            AppDbContext db,
+            IMinioClient minio,
+            IConfiguration config,
+            ITextExtractor textExtractor)                 // ✅ inyección por ctor
         {
             _db = db;
             _minio = minio;
             _bucket = config["MinIO:Bucket"] ?? "dms";
+            _textExtractor = textExtractor;               // ✅ guardar ref
         }
 
         // ==========================================================
@@ -46,6 +53,7 @@ namespace DmsContayPerezIPS.API.Controllers
 
             var objectName = $"{Guid.NewGuid()}_{file.FileName}";
 
+            // Subir a MinIO
             using (var stream = file.OpenReadStream())
             {
                 await _minio.PutObjectAsync(new PutObjectArgs()
@@ -68,7 +76,12 @@ namespace DmsContayPerezIPS.API.Controllers
 
             var createdAt = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Unspecified);
 
-            // Crear documento y asignar TipoDocId
+            // ==========================================================
+            // ✅ EXTRAER TEXTO PARA FTS (PDF/DOCX) — ANTES de crear la entidad
+            // ==========================================================
+            var extractedText = await _textExtractor.ExtractAsync(file, HttpContext.RequestAborted);
+
+            // Crear documento y asignar TipoDocId + SearchText
             var doc = new Document
             {
                 OriginalName = file.FileName,
@@ -79,6 +92,7 @@ namespace DmsContayPerezIPS.API.Controllers
                 CreatedAt = createdAt,
                 DocumentDate = parsedDocDate,
                 TipoDocId = tipoDocId, // 🔹 Asignación obligatoria
+                SearchText = extractedText, // 🔹 Clave para Full-Text Search
                 MetadataJson = JsonSerializer.Serialize(new
                 {
                     DocumentDate = parsedDocDate,
@@ -134,7 +148,7 @@ namespace DmsContayPerezIPS.API.Controllers
         }
 
         // ==========================================================
-        // 🔐 Búsqueda avanzada
+        // 🔐 Búsqueda avanzada (por metadatos/TRD/tags)
         // ==========================================================
         [HttpGet("search")]
         [Authorize]
@@ -196,6 +210,38 @@ namespace DmsContayPerezIPS.API.Controllers
                 Tags = d.DocumentTags != null ? d.DocumentTags.Select(t => t.Tag.Name).ToList() : new List<string>(),
                 d.MetadataJson
             }).ToList();
+
+            return Ok(results);
+        }
+
+        // ==========================================================
+        // 🔐 Full-Text Search (tsvector español + índice GIN)
+        // ==========================================================
+        [HttpGet("fulltext")]
+        [Authorize]
+        public async Task<IActionResult> FullTextSearch([FromQuery] string q)
+        {
+            if (string.IsNullOrWhiteSpace(q))
+                return BadRequest("Ingrese una consulta (q).");
+
+            // Usa la columna generada SearchVector con diccionario 'spanish'
+            var results = await _db.Documents
+                .Where(d => d.SearchVector != null &&
+                            d.SearchVector.Matches(EF.Functions.PlainToTsQuery("spanish", q)))
+                .Select(d => new
+                {
+                    d.Id,
+                    d.OriginalName,
+                    d.ContentType,
+                    d.SizeBytes,
+                    d.CreatedAt,
+                    d.DocumentDate,
+                    // snippet simple
+                    Snippet = d.SearchText != null && d.SearchText.Length > 240
+                        ? d.SearchText.Substring(0, 240) + "..."
+                        : d.SearchText
+                })
+                .ToListAsync();
 
             return Ok(results);
         }

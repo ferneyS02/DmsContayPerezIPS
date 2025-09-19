@@ -57,6 +57,10 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
+            "DocumentFormat.OpenXml": {
+              "target": "Package",
+              "version": "[3.3.0, )"
+            },
             "DotNetEnv": {
               "target": "Package",
               "version": "[3.1.1, )"
@@ -78,6 +82,10 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[9.0.9, )"
+            },
+            "PdfPig": {
+              "target": "Package",
+              "version": "[0.1.11, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
@@ -229,6 +237,12 @@
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
+          "dependencies": {
+            "Npgsql": {
+              "target": "Package",
+              "version": "[9.0.3, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",

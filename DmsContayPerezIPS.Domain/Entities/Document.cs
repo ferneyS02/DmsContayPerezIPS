@@ -1,4 +1,8 @@
-﻿namespace DmsContayPerezIPS.Domain.Entities
+﻿using System;
+using System.Collections.Generic;
+using NpgsqlTypes;
+
+namespace DmsContayPerezIPS.Domain.Entities
 {
     public class Document
     {
@@ -38,6 +42,13 @@
 
         // 🔹 Fecha oficial del documento
         public DateTime? DocumentDate { get; set; }
+
+        // 🔹 FTS (búsqueda de texto completo en PostgreSQL)
+        /// <summary>Texto plano extraído del archivo (para búsquedas). Puede ser null si no se pudo extraer.</summary>
+        public string? SearchText { get; set; }
+
+        /// <summary>Columna tsvector generada para FTS (PostgreSQL).</summary>
+        public NpgsqlTsVector? SearchVector { get; set; }
 
         // ==========================================================
         // 🔹 Relaciones

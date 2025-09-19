@@ -8,6 +8,9 @@ using Minio;
 using Minio.DataModel.Args;
 using System.Text;
 
+// ?? NUEVO: using del extractor de texto
+using DmsContayPerezIPS.API.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // ===== PostgreSQL =====
@@ -85,6 +88,9 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+// ?? NUEVO: registro del extractor de texto para inyección en los controladores
+builder.Services.AddScoped<ITextExtractor, PdfDocxTextExtractor>();
+
 var app = builder.Build();
 
 // ===== Crear bucket, ejecutar migraciones y seeding =====
@@ -104,12 +110,12 @@ using (var scope = app.Services.CreateScope())
         }
         else
         {
-            Console.WriteLine($"?? Bucket '{bucket}' ya existe en MinIO.");
+            Console.WriteLine($"? Bucket '{bucket}' ya existe en MinIO.");
         }
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"?? Error creando/verificando bucket en MinIO: {ex.Message}");
+        Console.WriteLine($"? Error creando/verificando bucket en MinIO: {ex.Message}");
     }
 
     // ?? Ejecutar migraciones

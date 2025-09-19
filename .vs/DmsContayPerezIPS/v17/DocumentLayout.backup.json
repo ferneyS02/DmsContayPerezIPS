@@ -3,16 +3,32 @@
   "WorkspaceRootPath": "C:\\Users\\Ferney\\source\\repos\\DmsContayPerezIPS\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{02263D79-90FB-4734-AF1C-3B37C4398B48}|DmsContayPerezIPS.Infrastructure\\DmsContayPerezIPS.Infrastructure.csproj|c:\\users\\ferney\\source\\repos\\dmscontayperezips\\dmscontayperezips.infrastructure\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{02263D79-90FB-4734-AF1C-3B37C4398B48}|DmsContayPerezIPS.Infrastructure\\DmsContayPerezIPS.Infrastructure.csproj|solutionrelative:dmscontayperezips.infrastructure\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E253AC18-F179-4D1D-AA60-00D181282745}|DmsContayPerezIPS.Domain\\DmsContayPerezIPS.Domain.csproj|c:\\users\\ferney\\source\\repos\\dmscontayperezips\\dmscontayperezips.domain\\entities\\subseriedocumental.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E253AC18-F179-4D1D-AA60-00D181282745}|DmsContayPerezIPS.Domain\\DmsContayPerezIPS.Domain.csproj|solutionrelative:dmscontayperezips.domain\\entities\\subseriedocumental.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{BA251AA0-AC56-4156-8CBE-CF6EE1FB2E72}|DmsContayPerezIPS.API\\DmsContayPerezIPS.API.csproj|c:\\users\\ferney\\source\\repos\\dmscontayperezips\\dmscontayperezips.api\\services\\pdfdocxtextextractor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BA251AA0-AC56-4156-8CBE-CF6EE1FB2E72}|DmsContayPerezIPS.API\\DmsContayPerezIPS.API.csproj|solutionrelative:dmscontayperezips.api\\services\\pdfdocxtextextractor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{BA251AA0-AC56-4156-8CBE-CF6EE1FB2E72}|DmsContayPerezIPS.API\\DmsContayPerezIPS.API.csproj|c:\\users\\ferney\\source\\repos\\dmscontayperezips\\dmscontayperezips.api\\controllers\\documentoscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{BA251AA0-AC56-4156-8CBE-CF6EE1FB2E72}|DmsContayPerezIPS.API\\DmsContayPerezIPS.API.csproj|solutionrelative:dmscontayperezips.api\\controllers\\documentoscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BA251AA0-AC56-4156-8CBE-CF6EE1FB2E72}|DmsContayPerezIPS.API\\DmsContayPerezIPS.API.csproj|c:\\users\\ferney\\source\\repos\\dmscontayperezips\\dmscontayperezips.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BA251AA0-AC56-4156-8CBE-CF6EE1FB2E72}|DmsContayPerezIPS.API\\DmsContayPerezIPS.API.csproj|solutionrelative:dmscontayperezips.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{02263D79-90FB-4734-AF1C-3B37C4398B48}|DmsContayPerezIPS.Infrastructure\\DmsContayPerezIPS.Infrastructure.csproj|c:\\users\\ferney\\source\\repos\\dmscontayperezips\\dmscontayperezips.infrastructure\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{02263D79-90FB-4734-AF1C-3B37C4398B48}|DmsContayPerezIPS.Infrastructure\\DmsContayPerezIPS.Infrastructure.csproj|solutionrelative:dmscontayperezips.infrastructure\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BA251AA0-AC56-4156-8CBE-CF6EE1FB2E72}|DmsContayPerezIPS.API\\DmsContayPerezIPS.API.csproj|c:\\users\\ferney\\source\\repos\\dmscontayperezips\\dmscontayperezips.api\\services\\itextextractor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BA251AA0-AC56-4156-8CBE-CF6EE1FB2E72}|DmsContayPerezIPS.API\\DmsContayPerezIPS.API.csproj|solutionrelative:dmscontayperezips.api\\services\\itextextractor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E253AC18-F179-4D1D-AA60-00D181282745}|DmsContayPerezIPS.Domain\\DmsContayPerezIPS.Domain.csproj|c:\\users\\ferney\\source\\repos\\dmscontayperezips\\dmscontayperezips.domain\\entities\\document.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E253AC18-F179-4D1D-AA60-00D181282745}|DmsContayPerezIPS.Domain\\DmsContayPerezIPS.Domain.csproj|solutionrelative:dmscontayperezips.domain\\entities\\document.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E253AC18-F179-4D1D-AA60-00D181282745}|DmsContayPerezIPS.Domain\\DmsContayPerezIPS.Domain.csproj|c:\\users\\ferney\\source\\repos\\dmscontayperezips\\dmscontayperezips.domain\\entities\\subseriedocumental.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E253AC18-F179-4D1D-AA60-00D181282745}|DmsContayPerezIPS.Domain\\DmsContayPerezIPS.Domain.csproj|solutionrelative:dmscontayperezips.domain\\entities\\subseriedocumental.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{BA251AA0-AC56-4156-8CBE-CF6EE1FB2E72}|DmsContayPerezIPS.API\\DmsContayPerezIPS.API.csproj|c:\\users\\ferney\\source\\repos\\dmscontayperezips\\dmscontayperezips.api\\controllers\\tiposdocumentalescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -51,32 +67,84 @@
             {
               "$type": "Document",
               "DocumentIndex": 2,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Ferney\\source\\repos\\DmsContayPerezIPS\\DmsContayPerezIPS.API\\Program.cs",
+              "RelativeDocumentMoniker": "DmsContayPerezIPS.API\\Program.cs",
+              "ToolTip": "C:\\Users\\Ferney\\source\\repos\\DmsContayPerezIPS\\DmsContayPerezIPS.API\\Program.cs",
+              "RelativeToolTip": "DmsContayPerezIPS.API\\Program.cs",
+              "ViewState": "AgIAAHsAAAAAAAAAAAAAABoAAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-19T15:56:48.845Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "PdfDocxTextExtractor.cs",
+              "DocumentMoniker": "C:\\Users\\Ferney\\source\\repos\\DmsContayPerezIPS\\DmsContayPerezIPS.API\\Services\\PdfDocxTextExtractor.cs",
+              "RelativeDocumentMoniker": "DmsContayPerezIPS.API\\Services\\PdfDocxTextExtractor.cs",
+              "ToolTip": "C:\\Users\\Ferney\\source\\repos\\DmsContayPerezIPS\\DmsContayPerezIPS.API\\Services\\PdfDocxTextExtractor.cs",
+              "RelativeToolTip": "DmsContayPerezIPS.API\\Services\\PdfDocxTextExtractor.cs",
+              "ViewState": "AgIAABkAAAAAAAAAAIAwwCIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-19T14:40:39.497Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ITextExtractor.cs",
+              "DocumentMoniker": "C:\\Users\\Ferney\\source\\repos\\DmsContayPerezIPS\\DmsContayPerezIPS.API\\Services\\ITextExtractor.cs",
+              "RelativeDocumentMoniker": "DmsContayPerezIPS.API\\Services\\ITextExtractor.cs",
+              "ToolTip": "C:\\Users\\Ferney\\source\\repos\\DmsContayPerezIPS\\DmsContayPerezIPS.API\\Services\\ITextExtractor.cs",
+              "RelativeToolTip": "DmsContayPerezIPS.API\\Services\\ITextExtractor.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-19T14:39:55.634Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Document.cs",
+              "DocumentMoniker": "C:\\Users\\Ferney\\source\\repos\\DmsContayPerezIPS\\DmsContayPerezIPS.Domain\\Entities\\Document.cs",
+              "RelativeDocumentMoniker": "DmsContayPerezIPS.Domain\\Entities\\Document.cs",
+              "ToolTip": "C:\\Users\\Ferney\\source\\repos\\DmsContayPerezIPS\\DmsContayPerezIPS.Domain\\Entities\\Document.cs",
+              "RelativeToolTip": "DmsContayPerezIPS.Domain\\Entities\\Document.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-19T14:16:48.697Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "DocumentosController.cs",
               "DocumentMoniker": "C:\\Users\\Ferney\\source\\repos\\DmsContayPerezIPS\\DmsContayPerezIPS.API\\Controllers\\DocumentosController.cs",
               "RelativeDocumentMoniker": "DmsContayPerezIPS.API\\Controllers\\DocumentosController.cs",
               "ToolTip": "C:\\Users\\Ferney\\source\\repos\\DmsContayPerezIPS\\DmsContayPerezIPS.API\\Controllers\\DocumentosController.cs",
               "RelativeToolTip": "DmsContayPerezIPS.API\\Controllers\\DocumentosController.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAAMgAAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAAC0AAAAAAAAAAADwv/kAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-17T22:43:26.069Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
               "Title": "AppDbContext.cs",
               "DocumentMoniker": "C:\\Users\\Ferney\\source\\repos\\DmsContayPerezIPS\\DmsContayPerezIPS.Infrastructure\\AppDbContext.cs",
               "RelativeDocumentMoniker": "DmsContayPerezIPS.Infrastructure\\AppDbContext.cs",
               "ToolTip": "C:\\Users\\Ferney\\source\\repos\\DmsContayPerezIPS\\DmsContayPerezIPS.Infrastructure\\AppDbContext.cs",
               "RelativeToolTip": "DmsContayPerezIPS.Infrastructure\\AppDbContext.cs",
-              "ViewState": "AgIAAMgAAAAAAAAAAAAAAO8AAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAFIAAAAAAAAAAAAMwGEAAAAzAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-17T22:02:13.274Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 8,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\Ferney\\source\\repos\\DmsContayPerezIPS\\DmsContayPerezIPS.API\\appsettings.json",
               "RelativeDocumentMoniker": "DmsContayPerezIPS.API\\appsettings.json",
@@ -84,11 +152,12 @@
               "RelativeToolTip": "DmsContayPerezIPS.API\\appsettings.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-09-17T21:47:29.036Z"
+              "WhenOpened": "2025-09-17T21:47:29.036Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 6,
               "Title": "SubserieDocumental.cs",
               "DocumentMoniker": "C:\\Users\\Ferney\\source\\repos\\DmsContayPerezIPS\\DmsContayPerezIPS.Domain\\Entities\\SubserieDocumental.cs",
               "RelativeDocumentMoniker": "DmsContayPerezIPS.Domain\\Entities\\SubserieDocumental.cs",
@@ -101,7 +170,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 7,
               "Title": "TiposDocumentalesController.cs",
               "DocumentMoniker": "C:\\Users\\Ferney\\source\\repos\\DmsContayPerezIPS\\DmsContayPerezIPS.API\\Controllers\\TiposDocumentalesController.cs",
               "RelativeDocumentMoniker": "DmsContayPerezIPS.API\\Controllers\\TiposDocumentalesController.cs",
@@ -114,19 +183,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 9,
               "Title": "User.cs",
               "DocumentMoniker": "C:\\Users\\Ferney\\source\\repos\\DmsContayPerezIPS\\DmsContayPerezIPS.Domain\\Entities\\User.cs",
               "RelativeDocumentMoniker": "DmsContayPerezIPS.Domain\\Entities\\User.cs",
               "ToolTip": "C:\\Users\\Ferney\\source\\repos\\DmsContayPerezIPS\\DmsContayPerezIPS.Domain\\Entities\\User.cs",
               "RelativeToolTip": "DmsContayPerezIPS.Domain\\Entities\\User.cs",
-              "ViewState": "AgIAAAgAAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAxwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-17T16:51:02.56Z"
+              "WhenOpened": "2025-09-17T16:51:02.56Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 10,
               "Title": "SerieDocumental.cs",
               "DocumentMoniker": "C:\\Users\\Ferney\\source\\repos\\DmsContayPerezIPS\\DmsContayPerezIPS.Domain\\Entities\\SerieDocumental.cs",
               "RelativeDocumentMoniker": "DmsContayPerezIPS.Domain\\Entities\\SerieDocumental.cs",
@@ -134,23 +204,25 @@
               "RelativeToolTip": "DmsContayPerezIPS.Domain\\Entities\\SerieDocumental.cs",
               "ViewState": "AgIAAAkAAAAAAAAAAAAowBMAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-17T16:26:59.234Z"
+              "WhenOpened": "2025-09-17T16:26:59.234Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 11,
               "Title": "Folder.cs",
               "DocumentMoniker": "C:\\Users\\Ferney\\source\\repos\\DmsContayPerezIPS\\DmsContayPerezIPS.Domain\\Entities\\Folder.cs",
               "RelativeDocumentMoniker": "DmsContayPerezIPS.Domain\\Entities\\Folder.cs",
               "ToolTip": "C:\\Users\\Ferney\\source\\repos\\DmsContayPerezIPS\\DmsContayPerezIPS.Domain\\Entities\\Folder.cs",
               "RelativeToolTip": "DmsContayPerezIPS.Domain\\Entities\\Folder.cs",
-              "ViewState": "AgIAAAsAAAAAAAAAAAAwwBcAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAsAAAAAAAAAAAA9wBcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-17T16:26:36.582Z"
+              "WhenOpened": "2025-09-17T16:26:36.582Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 12,
               "Title": "DocumentVersion.cs",
               "DocumentMoniker": "C:\\Users\\Ferney\\source\\repos\\DmsContayPerezIPS\\DmsContayPerezIPS.Domain\\Entities\\DocumentVersion.cs",
               "RelativeDocumentMoniker": "DmsContayPerezIPS.Domain\\Entities\\DocumentVersion.cs",
@@ -158,7 +230,8 @@
               "RelativeToolTip": "DmsContayPerezIPS.Domain\\Entities\\DocumentVersion.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-17T16:26:12.616Z"
+              "WhenOpened": "2025-09-17T16:26:12.616Z",
+              "EditorCaption": ""
             }
           ]
         }

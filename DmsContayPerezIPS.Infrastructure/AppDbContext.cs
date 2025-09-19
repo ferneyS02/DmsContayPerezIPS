@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
 using DmsContayPerezIPS.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 using DmsContayPerezIPS.Domain.Enums;
+using Microsoft.EntityFrameworkCore;
 
 namespace DmsContayPerezIPS.Infrastructure.Persistence
 {
@@ -35,9 +35,7 @@ namespace DmsContayPerezIPS.Infrastructure.Persistence
                     .Where(p => p.ClrType == typeof(DateTime) || p.ClrType == typeof(DateTime?));
 
                 foreach (var p in dateTimeProps)
-                {
                     p.SetColumnType("timestamp without time zone");
-                }
             }
 
             // ==========================================================
@@ -88,6 +86,27 @@ namespace DmsContayPerezIPS.Infrastructure.Persistence
             modelBuilder.Entity<Document>()
                 .Property(d => d.CreatedAt)
                 .HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'");
+
+            // ===============================================
+            // 🔎 PostgreSQL Full-Text Search (spanish + GIN)
+            // ===============================================
+            // Extensión para búsquedas sin tildes (opcional pero útil)
+            modelBuilder.HasPostgresExtension("unaccent");
+
+            modelBuilder.Entity<Document>(b =>
+            {
+                // Columna tsvector GENERADA a partir de SearchText, usando diccionario 'spanish'
+                b.HasGeneratedTsVectorColumn(
+                    d => d.SearchVector,
+                    "spanish",
+                    d => new { d.SearchText } // (no se omite nada: tal como en tu bloque)
+                );
+
+                // Índice GIN para acelerar matches FTS
+                b.HasIndex(d => d.SearchVector)
+                    .HasDatabaseName("IX_Documents_SearchVector")
+                    .HasMethod("GIN");
+            });
 
             // ==========================================================
             // 🔹 Seed Roles

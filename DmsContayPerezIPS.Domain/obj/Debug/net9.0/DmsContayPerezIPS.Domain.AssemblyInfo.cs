@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DmsContayPerezIPS.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+11e26c415c0e76ff34052ed914eb61b7f9fcb88c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+567d059bdade339debc34e448b52a4c9546bff0a")]
 [assembly: System.Reflection.AssemblyProductAttribute("DmsContayPerezIPS.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DmsContayPerezIPS.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
