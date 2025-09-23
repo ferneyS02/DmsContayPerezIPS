@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DmsContayPerezIPS.Application")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+567d059bdade339debc34e448b52a4c9546bff0a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ee74193bf9587e5d6923182beb5ba54e7a26316f")]
 [assembly: System.Reflection.AssemblyProductAttribute("DmsContayPerezIPS.Application")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DmsContayPerezIPS.Application")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

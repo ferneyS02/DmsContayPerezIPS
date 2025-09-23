@@ -8,6 +8,8 @@ C:\Users\Ferney\source\repos\DmsContayPerezIPS\DmsContayPerezIPS.API\bin\Debug\n
 C:\Users\Ferney\source\repos\DmsContayPerezIPS\DmsContayPerezIPS.API\bin\Debug\net9.0\DmsContayPerezIPS.API.pdb
 C:\Users\Ferney\source\repos\DmsContayPerezIPS\DmsContayPerezIPS.API\bin\Debug\net9.0\BCrypt.Net-Next.dll
 C:\Users\Ferney\source\repos\DmsContayPerezIPS\DmsContayPerezIPS.API\bin\Debug\net9.0\CommunityToolkit.HighPerformance.dll
+C:\Users\Ferney\source\repos\DmsContayPerezIPS\DmsContayPerezIPS.API\bin\Debug\net9.0\DocumentFormat.OpenXml.dll
+C:\Users\Ferney\source\repos\DmsContayPerezIPS\DmsContayPerezIPS.API\bin\Debug\net9.0\DocumentFormat.OpenXml.Framework.dll
 C:\Users\Ferney\source\repos\DmsContayPerezIPS\DmsContayPerezIPS.API\bin\Debug\net9.0\DotNetEnv.dll
 C:\Users\Ferney\source\repos\DmsContayPerezIPS\DmsContayPerezIPS.API\bin\Debug\net9.0\Humanizer.dll
 C:\Users\Ferney\source\repos\DmsContayPerezIPS\DmsContayPerezIPS.API\bin\Debug\net9.0\itext.barcodes.dll
@@ -77,6 +79,7 @@ C:\Users\Ferney\source\repos\DmsContayPerezIPS\DmsContayPerezIPS.API\bin\Debug\n
 C:\Users\Ferney\source\repos\DmsContayPerezIPS\DmsContayPerezIPS.API\bin\Debug\net9.0\System.Composition.TypedParts.dll
 C:\Users\Ferney\source\repos\DmsContayPerezIPS\DmsContayPerezIPS.API\bin\Debug\net9.0\System.IdentityModel.Tokens.Jwt.dll
 C:\Users\Ferney\source\repos\DmsContayPerezIPS\DmsContayPerezIPS.API\bin\Debug\net9.0\System.IO.Hashing.dll
+C:\Users\Ferney\source\repos\DmsContayPerezIPS\DmsContayPerezIPS.API\bin\Debug\net9.0\System.IO.Packaging.dll
 C:\Users\Ferney\source\repos\DmsContayPerezIPS\DmsContayPerezIPS.API\bin\Debug\net9.0\System.Reactive.dll
 C:\Users\Ferney\source\repos\DmsContayPerezIPS\DmsContayPerezIPS.API\bin\Debug\net9.0\System.Text.Json.dll
 C:\Users\Ferney\source\repos\DmsContayPerezIPS\DmsContayPerezIPS.API\bin\Debug\net9.0\cs\Microsoft.CodeAnalysis.resources.dll

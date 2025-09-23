@@ -64,6 +64,22 @@
   },
   {
     "ContainingType": "DmsContayPerezIPS.API.Controllers.DocumentosController",
+    "Method": "FullTextSearch",
+    "RelativePath": "api/Documentos/fulltext",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "q",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DmsContayPerezIPS.API.Controllers.DocumentosController",
     "Method": "ListDocuments",
     "RelativePath": "api/Documentos/list",
     "HttpMethod": "GET",

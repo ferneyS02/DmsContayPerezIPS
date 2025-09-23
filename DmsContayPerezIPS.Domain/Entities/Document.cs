@@ -10,7 +10,7 @@ namespace DmsContayPerezIPS.Domain.Entities
 
         // 🔹 Datos básicos
         public string OriginalName { get; set; } = null!;   // Nombre original del archivo
-        public string ObjectName { get; set; } = null!;     // Nombre real en MinIO
+        public string ObjectName { get; set; } = null!;   // Nombre real en MinIO
         public string ContentType { get; set; } = null!;
         public long SizeBytes { get; set; }
 
@@ -24,7 +24,7 @@ namespace DmsContayPerezIPS.Domain.Entities
         // 🔹 Metadatos dinámicos en JSON
         public string? MetadataJson { get; set; }
 
-        // 🔹 Texto extraído para búsqueda avanzada
+        // 🔹 Texto extraído (si quieres conservarlo adicionalmente)
         public string? ExtractedText { get; set; }
 
         // 🔹 Borrado lógico
@@ -32,7 +32,7 @@ namespace DmsContayPerezIPS.Domain.Entities
 
         // 🔹 Auditoría
         public long? CreatedBy { get; set; }
-        public DateTime CreatedAt { get; set; }   // 🚫 sin valor dinámico aquí
+        public DateTime CreatedAt { get; set; }
         public long? UpdatedBy { get; set; }
         public DateTime? UpdatedAt { get; set; }
 
@@ -44,11 +44,11 @@ namespace DmsContayPerezIPS.Domain.Entities
         public DateTime? DocumentDate { get; set; }
 
         // 🔹 FTS (búsqueda de texto completo en PostgreSQL)
-        /// <summary>Texto plano extraído del archivo (para búsquedas). Puede ser null si no se pudo extraer.</summary>
-        public string? SearchText { get; set; }
+        /// <summary>Texto plano para FTS. Mejor guardar "" en vez de null.</summary>
+        public string SearchText { get; set; } = string.Empty;
 
-        /// <summary>Columna tsvector generada para FTS (PostgreSQL).</summary>
-        public NpgsqlTsVector? SearchVector { get; set; }
+        /// <summary>Columna tsvector generada por PostgreSQL.</summary>
+        public NpgsqlTsVector SearchVector { get; private set; } = default!;
 
         // ==========================================================
         // 🔹 Relaciones
@@ -56,7 +56,8 @@ namespace DmsContayPerezIPS.Domain.Entities
         public Folder? Folder { get; set; }
         public TipoDocumental? TipoDocumental { get; set; }
         public User? Creator { get; set; }
-        public ICollection<DocumentVersion>? Versions { get; set; }
-        public ICollection<DocumentTag>? DocumentTags { get; set; }
+
+        public ICollection<DocumentVersion> Versions { get; set; } = new List<DocumentVersion>();
+        public ICollection<DocumentTag> DocumentTags { get; set; } = new List<DocumentTag>();
     }
 }

@@ -1,3 +1,4 @@
+using DmsContayPerezIPS.API.Services;               // ITextExtractor / PdfDocxTextExtractor
 using DmsContayPerezIPS.Infrastructure.Persistence;
 using DmsContayPerezIPS.Infrastructure.Seed;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -7,9 +8,6 @@ using Microsoft.OpenApi.Models;
 using Minio;
 using Minio.DataModel.Args;
 using System.Text;
-
-// ?? NUEVO: using del extractor de texto
-using DmsContayPerezIPS.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -61,7 +59,7 @@ builder.Services.AddSwaggerGen(c =>
         Version = "v1"
     });
 
-    // ?? Configuración de seguridad para JWT
+    // Seguridad JWT en Swagger
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
@@ -69,7 +67,7 @@ builder.Services.AddSwaggerGen(c =>
         Scheme = "Bearer",
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
-        Description = "Ingrese el token JWT con el prefijo **Bearer**. Ejemplo: `Bearer {tu_token}`"
+        Description = "Escribe: Bearer {tu_token}"
     });
 
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -83,12 +81,12 @@ builder.Services.AddSwaggerGen(c =>
                     Id = "Bearer"
                 }
             },
-            new string[] {}
+            Array.Empty<string>()
         }
     });
 });
 
-// ?? NUEVO: registro del extractor de texto para inyección en los controladores
+// ===== Extractor de texto (PDF/DOCX) =====
 builder.Services.AddScoped<ITextExtractor, PdfDocxTextExtractor>();
 
 var app = builder.Build();
@@ -106,22 +104,22 @@ using (var scope = app.Services.CreateScope())
         if (!exists)
         {
             await minio.MakeBucketAsync(new MakeBucketArgs().WithBucket(bucket));
-            Console.WriteLine($"? Bucket '{bucket}' creado automáticamente en MinIO.");
+            Console.WriteLine($"Bucket '{bucket}' creado en MinIO.");
         }
         else
         {
-            Console.WriteLine($"? Bucket '{bucket}' ya existe en MinIO.");
+            Console.WriteLine($"Bucket '{bucket}' ya existe en MinIO.");
         }
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"? Error creando/verificando bucket en MinIO: {ex.Message}");
+        Console.WriteLine($"Error verificando/creando bucket en MinIO: {ex.Message}");
     }
 
-    // ?? Ejecutar migraciones
+    // Migraciones
     await db.Database.MigrateAsync();
 
-    // ?? Ejecutar seeding (roles + admin + bucket)
+    // Seeding (roles, admin, etc.)
     await SeederService.SeedAsync(db, minio, bucket);
 }
 

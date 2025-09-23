@@ -243,6 +243,27 @@
         }
       }
     },
+    "/api/Documentos/fulltext": {
+      "get": {
+        "tags": [
+          "Documentos"
+        ],
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/TiposDocumentales/list": {
       "get": {
         "tags": [
@@ -307,7 +328,7 @@
     "securitySchemes": {
       "Bearer": {
         "type": "apiKey",
-        "description": "Ingrese el token JWT con el prefijo **Bearer**. Ejemplo: `Bearer {tu_token}`",
+        "description": "Escribe: Bearer {tu_token}",
         "name": "Authorization",
         "in": "header"
       }

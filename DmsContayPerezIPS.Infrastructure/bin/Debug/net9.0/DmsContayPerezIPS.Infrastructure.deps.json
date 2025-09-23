@@ -754,6 +754,9 @@
       },
       "System.Threading.Channels/7.0.0": {},
       "DmsContayPerezIPS.Domain/1.0.0": {
+        "dependencies": {
+          "Npgsql": "9.0.3"
+        },
         "runtime": {
           "DmsContayPerezIPS.Domain.dll": {
             "assemblyVersion": "1.0.0.0",
