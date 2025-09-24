@@ -75,37 +75,33 @@
         "tags": [
           "Documentos"
         ],
-        "parameters": [
-          {
-            "name": "tipoDocId",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          },
-          {
-            "name": "documentDate",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
         "requestBody": {
           "content": {
             "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "properties": {
-                  "file": {
+                  "File": {
                     "type": "string",
                     "format": "binary"
+                  },
+                  "TipoDocId": {
+                    "type": "integer",
+                    "format": "int64"
+                  },
+                  "DocumentDate": {
+                    "type": "string"
                   }
                 }
               },
               "encoding": {
-                "file": {
+                "File": {
+                  "style": "form"
+                },
+                "TipoDocId": {
+                  "style": "form"
+                },
+                "DocumentDate": {
                   "style": "form"
                 }
               }

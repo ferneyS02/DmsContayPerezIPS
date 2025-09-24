@@ -158,17 +158,17 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "file",
+        "Name": "File",
         "Type": "Microsoft.AspNetCore.Http.IFormFile",
         "IsRequired": false
       },
       {
-        "Name": "tipoDocId",
+        "Name": "TipoDocId",
         "Type": "System.Int64",
         "IsRequired": false
       },
       {
-        "Name": "documentDate",
+        "Name": "DocumentDate",
         "Type": "System.String",
         "IsRequired": false
       }
