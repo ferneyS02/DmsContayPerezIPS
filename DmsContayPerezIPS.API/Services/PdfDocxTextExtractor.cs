@@ -1,63 +1,51 @@
 ﻿using DocumentFormat.OpenXml.Packaging;
-using iText.Kernel.Pdf;
-using iText.Kernel.Pdf.Canvas.Parser;
-using iText.Kernel.Pdf.Canvas.Parser.Listener;
 using Microsoft.AspNetCore.Http;
 using System.Text;
 using System.Text.RegularExpressions;
+using UglyToad.PdfPig;            // <- PdfPig (solo lectura)
+using UglyToad.PdfPig.Content;
 
 namespace DmsContayPerezIPS.API.Services
 {
-    /// <summary>
-    /// Extractor SIN OCR: solo PDF con texto embebido (iText7) y DOCX (OpenXML).
-    /// Para PDFs escaneados/imágenes NO habrá texto (devolverá string.Empty).
-    /// </summary>
     public class PdfDocxTextExtractor : ITextExtractor
     {
         public async Task<string> ExtractAsync(IFormFile file, CancellationToken ct = default)
         {
             if (file == null || file.Length == 0) return string.Empty;
 
-            var name = (file.FileName ?? string.Empty).ToLowerInvariant();
-            var ctType = (file.ContentType ?? string.Empty).ToLowerInvariant();
+            var name = file.FileName?.ToLowerInvariant() ?? string.Empty;
+            var ctType = file.ContentType?.ToLowerInvariant() ?? string.Empty;
 
             if (name.EndsWith(".pdf") || ctType.Contains("pdf"))
-                return await ExtractPdfTextAsync(file, ct);
+                return await ExtractPdfAsync(file, ct);
 
             if (name.EndsWith(".docx") || ctType.Contains("officedocument.wordprocessingml.document"))
-                return await ExtractDocxTextAsync(file, ct);
+                return await ExtractDocxAsync(file, ct);
 
-            // Otros tipos: sin soporte de texto
+            // Otros tipos (doc/xlsx/jpg/png): por ahora no extraemos
             return string.Empty;
         }
 
-        private static async Task<string> ExtractPdfTextAsync(IFormFile file, CancellationToken ct)
+        private static async Task<string> ExtractPdfAsync(IFormFile file, CancellationToken ct)
         {
+            // PdfPig requiere stream seekable → copiamos a MemoryStream
             using var ms = new MemoryStream();
             await file.CopyToAsync(ms, ct);
             ms.Position = 0;
 
             var sb = new StringBuilder();
-
-            using (var pdfReader = new PdfReader(ms))
-            using (var pdfDoc = new PdfDocument(pdfReader))
+            using var pdf = PdfDocument.Open(ms);
+            foreach (var page in pdf.GetPages())
             {
-                int pages = pdfDoc.GetNumberOfPages();
-                for (int i = 1; i <= pages; i++)
-                {
-                    ct.ThrowIfCancellationRequested();
-                    var page = pdfDoc.GetPage(i);
-                    var strategy = new LocationTextExtractionStrategy();
-                    var text = PdfTextExtractor.GetTextFromPage(page, strategy);
-                    if (!string.IsNullOrWhiteSpace(text))
-                        sb.AppendLine(text);
-                }
+                ct.ThrowIfCancellationRequested();
+                var text = page.Text;
+                if (!string.IsNullOrWhiteSpace(text))
+                    sb.AppendLine(text);
             }
-
             return Normalize(sb.ToString());
         }
 
-        private static async Task<string> ExtractDocxTextAsync(IFormFile file, CancellationToken ct)
+        private static async Task<string> ExtractDocxAsync(IFormFile file, CancellationToken ct)
         {
             using var ms = new MemoryStream();
             await file.CopyToAsync(ms, ct);
@@ -75,7 +63,7 @@ namespace DmsContayPerezIPS.API.Services
             text = text.Replace("\0", " ");
             text = Regex.Replace(text, @"\s+", " ").Trim();
 
-            const int maxChars = 1_000_000; // protección
+            const int maxChars = 1_000_000;
             if (text.Length > maxChars)
                 text = text[..maxChars];
 

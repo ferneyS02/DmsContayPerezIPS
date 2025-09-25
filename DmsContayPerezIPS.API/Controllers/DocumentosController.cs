@@ -39,7 +39,7 @@ namespace DmsContayPerezIPS.API.Controllers
         [Authorize]
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> Upload(
-            IFormFile file,                    // sin [FromForm] para evitar el bug de Swashbuckle
+            IFormFile file,                // sin [FromForm] para evitar el bug de Swashbuckle
             [FromForm] long tipoDocId,
             [FromForm] string? documentDate = null)
         {
@@ -174,7 +174,7 @@ namespace DmsContayPerezIPS.API.Controllers
         {
             var query = _db.Documents.AsQueryable();
 
-            // ✅ case-insensitive nativo en PostgreSQL
+            // ✅ case-insensitive nativo en PostgreSQL (evita ToLower/ToLowerInvariant)
             if (!string.IsNullOrWhiteSpace(name))
                 query = query.Where(d => EF.Functions.ILike(d.OriginalName ?? "", $"%{name}%"));
 

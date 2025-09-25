@@ -90,9 +90,9 @@
               "target": "Package",
               "version": "[9.0.4, )"
             },
-            "itext7": {
+            "UglyToad.PdfPig": {
               "target": "Package",
-              "version": "[9.3.0, )"
+              "version": "[0.1.10, )"
             }
           },
           "imports": [
