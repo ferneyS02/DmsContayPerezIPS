@@ -39,7 +39,7 @@ namespace DmsContayPerezIPS.API.Controllers
         [Authorize]
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> Upload(
-            IFormFile file,                    // ⬅️ SIN [FromForm]
+            IFormFile file,                    // sin [FromForm] para evitar el bug de Swashbuckle
             [FromForm] long tipoDocId,
             [FromForm] string? documentDate = null)
         {
@@ -174,9 +174,9 @@ namespace DmsContayPerezIPS.API.Controllers
         {
             var query = _db.Documents.AsQueryable();
 
+            // ✅ case-insensitive nativo en PostgreSQL
             if (!string.IsNullOrWhiteSpace(name))
-                query = query.Where(d => (d.OriginalName ?? string.Empty)
-                    .ToLowerInvariant().Contains(name.ToLowerInvariant()));
+                query = query.Where(d => EF.Functions.ILike(d.OriginalName ?? "", $"%{name}%"));
 
             if (fromUpload.HasValue)
                 query = query.Where(d => d.CreatedAt >= fromUpload.Value);
@@ -200,8 +200,7 @@ namespace DmsContayPerezIPS.API.Controllers
                                          d.TipoDocumental.Subserie.SerieId == serieId.Value);
 
             if (!string.IsNullOrWhiteSpace(metadata))
-                query = query.Where(d => (d.MetadataJson ?? string.Empty)
-                    .ToLowerInvariant().Contains(metadata.ToLowerInvariant()));
+                query = query.Where(d => EF.Functions.ILike(d.MetadataJson ?? "", $"%{metadata}%"));
 
             var results = query.Select(d => new
             {

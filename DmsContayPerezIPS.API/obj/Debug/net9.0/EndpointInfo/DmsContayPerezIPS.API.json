@@ -81,27 +81,27 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "File": {
+                  "file": {
                     "type": "string",
                     "format": "binary"
                   },
-                  "TipoDocId": {
+                  "tipoDocId": {
                     "type": "integer",
                     "format": "int64"
                   },
-                  "DocumentDate": {
+                  "documentDate": {
                     "type": "string"
                   }
                 }
               },
               "encoding": {
-                "File": {
+                "file": {
                   "style": "form"
                 },
-                "TipoDocId": {
+                "tipoDocId": {
                   "style": "form"
                 },
-                "DocumentDate": {
+                "documentDate": {
                   "style": "form"
                 }
               }
@@ -215,13 +215,6 @@
             "schema": {
               "type": "integer",
               "format": "int64"
-            }
-          },
-          {
-            "name": "tag",
-            "in": "query",
-            "schema": {
-              "type": "string"
             }
           },
           {
