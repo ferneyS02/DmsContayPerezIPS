@@ -9,6 +9,12 @@ using Minio;
 using Minio.DataModel.Args;
 using System.Text;
 
+// Opcional: cargar variables desde .env si existe
+try { DotNetEnv.Env.Load(); } catch { /* ignore */ }
+
+// Opcional: compatibilidad Npgsql para DateTime
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
 var builder = WebApplication.CreateBuilder(args);
 
 // ===== PostgreSQL =====
@@ -25,6 +31,7 @@ builder.Services.AddSingleton<IMinioClient>(sp =>
     return new MinioClient()
         .WithEndpoint(endpoint)
         .WithCredentials(accessKey, secretKey)
+        // .WithSSL() // habilítalo si usas https en MinIO
         .Build();
 });
 

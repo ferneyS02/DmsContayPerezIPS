@@ -9886,6 +9886,7 @@
       "Microsoft.AspNetCore.OpenApi >= 9.0.9",
       "Microsoft.EntityFrameworkCore >= 9.0.9",
       "Microsoft.EntityFrameworkCore.Design >= 9.0.9",
+      "Minio >= 6.0.5",
       "Swashbuckle.AspNetCore >= 9.0.4",
       "itext7 >= 9.3.0"
     ]
@@ -9971,6 +9972,10 @@
             "suppressParent": "All",
             "target": "Package",
             "version": "[9.0.9, )"
+          },
+          "Minio": {
+            "target": "Package",
+            "version": "[6.0.5, )"
           },
           "Swashbuckle.AspNetCore": {
             "target": "Package",

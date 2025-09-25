@@ -9,99 +9,73 @@ using System.Text.RegularExpressions;
 namespace DmsContayPerezIPS.API.Services
 {
     /// <summary>
-    /// Extrae texto de PDF (texto “nativo”) e imágenes incrustadas como texto no son soportadas aquí (OCR no incluido).
-    /// Extrae texto de DOCX vía OpenXML.
+    /// Extractor SIN OCR: solo PDF con texto embebido (iText7) y DOCX (OpenXML).
+    /// Para PDFs escaneados/imágenes NO habrá texto (devolverá string.Empty).
     /// </summary>
     public class PdfDocxTextExtractor : ITextExtractor
     {
-        public async Task<string?> ExtractAsync(IFormFile file, CancellationToken ct = default)
+        public async Task<string> ExtractAsync(IFormFile file, CancellationToken ct = default)
         {
-            if (file == null || file.Length == 0) return null;
+            if (file == null || file.Length == 0) return string.Empty;
 
             var name = (file.FileName ?? string.Empty).ToLowerInvariant();
             var ctType = (file.ContentType ?? string.Empty).ToLowerInvariant();
 
-            // PDF
             if (name.EndsWith(".pdf") || ctType.Contains("pdf"))
-                return await ExtractPdfAsync(file, ct);
+                return await ExtractPdfTextAsync(file, ct);
 
-            // DOCX
             if (name.EndsWith(".docx") || ctType.Contains("officedocument.wordprocessingml.document"))
-                return await ExtractDocxAsync(file, ct);
+                return await ExtractDocxTextAsync(file, ct);
 
-            // Otros tipos (doc/xlsx/jpg/png): por ahora no se extraen aquí (devuelve null para que el caller decida)
-            return null;
+            // Otros tipos: sin soporte de texto
+            return string.Empty;
         }
 
-        private static async Task<string?> ExtractPdfAsync(IFormFile file, CancellationToken ct)
+        private static async Task<string> ExtractPdfTextAsync(IFormFile file, CancellationToken ct)
         {
-            // iText7 requiere un stream seekable → copiamos a MemoryStream
             using var ms = new MemoryStream();
             await file.CopyToAsync(ms, ct);
             ms.Position = 0;
 
-            try
+            var sb = new StringBuilder();
+
+            using (var pdfReader = new PdfReader(ms))
+            using (var pdfDoc = new PdfDocument(pdfReader))
             {
-                using var reader = new PdfReader(ms);
-                using var pdf = new PdfDocument(reader);
-
-                var sb = new StringBuilder();
-
-                int pages = pdf.GetNumberOfPages();
+                int pages = pdfDoc.GetNumberOfPages();
                 for (int i = 1; i <= pages; i++)
                 {
                     ct.ThrowIfCancellationRequested();
-                    var page = pdf.GetPage(i);
-
-                    // Estrategia simple de extracción de texto (no OCR)
-                    var strategy = new SimpleTextExtractionStrategy();
+                    var page = pdfDoc.GetPage(i);
+                    var strategy = new LocationTextExtractionStrategy();
                     var text = PdfTextExtractor.GetTextFromPage(page, strategy);
-
                     if (!string.IsNullOrWhiteSpace(text))
                         sb.AppendLine(text);
                 }
+            }
 
-                var raw = sb.ToString();
-                return Normalize(raw);
-            }
-            catch
-            {
-                // Si el PDF está cifrado, corrupto o solo tiene imágenes, iText no extraerá texto.
-                // Devuelve null para que el caller pueda decidir (p.ej., usar OCR si está disponible).
-                return null;
-            }
+            return Normalize(sb.ToString());
         }
 
-        private static async Task<string?> ExtractDocxAsync(IFormFile file, CancellationToken ct)
+        private static async Task<string> ExtractDocxTextAsync(IFormFile file, CancellationToken ct)
         {
             using var ms = new MemoryStream();
             await file.CopyToAsync(ms, ct);
             ms.Position = 0;
 
-            try
-            {
-                using var doc = WordprocessingDocument.Open(ms, false);
-                var body = doc.MainDocumentPart?.Document?.Body;
-                var text = body?.InnerText ?? string.Empty;
-                return Normalize(text);
-            }
-            catch
-            {
-                // DOCX inválido o dañado
-                return null;
-            }
+            using var doc = WordprocessingDocument.Open(ms, false);
+            var body = doc.MainDocumentPart?.Document?.Body;
+            var text = body?.InnerText ?? string.Empty;
+            return Normalize(text);
         }
 
         private static string Normalize(string text)
         {
             if (string.IsNullOrWhiteSpace(text)) return string.Empty;
-
-            // Elimina nulls, colapsa espacios, corta textos gigantes (protección)
             text = text.Replace("\0", " ");
             text = Regex.Replace(text, @"\s+", " ").Trim();
 
-            // Corte de seguridad (~1 MB)
-            const int maxChars = 1_000_000;
+            const int maxChars = 1_000_000; // protección
             if (text.Length > maxChars)
                 text = text[..maxChars];
 
