@@ -1,10 +1,11 @@
 ﻿using System.Text.Json;
 using DmsContayPerezIPS.Domain.Entities;
 using DmsContayPerezIPS.Infrastructure.Persistence;
-using DmsContayPerezIPS.API.Services;                 // ITextExtractor + SpanishDateParser (si lo tienes aquí)
+using DmsContayPerezIPS.API.Services; // ITextExtractor + SpanishDateParser (si lo tienes aquí)
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;                  // Include/Where/EF.Functions
+using Microsoft.EntityFrameworkCore;  // EF.Functions
 using Minio;
 using Minio.DataModel.Args;
 
@@ -17,18 +18,18 @@ namespace DmsContayPerezIPS.API.Controllers
         private readonly AppDbContext _db;
         private readonly IMinioClient _minio;
         private readonly string _bucket;
-        private readonly ITextExtractor _textExtractor;   // ✅ extractor
+        private readonly ITextExtractor _textExtractor;
 
         public DocumentosController(
             AppDbContext db,
             IMinioClient minio,
             IConfiguration config,
-            ITextExtractor textExtractor)                 // ✅ inyección por ctor
+            ITextExtractor textExtractor)
         {
             _db = db;
             _minio = minio;
             _bucket = config["MinIO:Bucket"] ?? "dms";
-            _textExtractor = textExtractor;               // ✅ guardar ref
+            _textExtractor = textExtractor;
         }
 
         // ==========================================================
@@ -38,7 +39,7 @@ namespace DmsContayPerezIPS.API.Controllers
         [Authorize]
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> Upload(
-            [FromForm] IFormFile file,
+            IFormFile file,                    // ⬅️ SIN [FromForm]
             [FromForm] long tipoDocId,
             [FromForm] string? documentDate = null)
         {
@@ -75,25 +76,21 @@ namespace DmsContayPerezIPS.API.Controllers
                     .WithContentType(contentType));
             }
 
-            // ==========================================================
             // ✅ Parseo y normalización de fechas
-            // ==========================================================
             DateTime? parsedDocDate = null;
-            if (!string.IsNullOrWhiteSpace(documentDate))
+            if (!string.IsNullOrWhiteSpace(documentDate) &&
+                SpanishDateParser.TryParse(documentDate, out var parsed))
             {
-                if (SpanishDateParser.TryParse(documentDate, out var parsed))
-                    parsedDocDate = DateTime.SpecifyKind(parsed, DateTimeKind.Unspecified);
+                parsedDocDate = DateTime.SpecifyKind(parsed, DateTimeKind.Unspecified);
             }
 
             var createdAt = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Unspecified);
 
-            // ==========================================================
-            // ✅ EXTRAER TEXTO PARA FTS (PDF/DOCX) — ANTES de crear la entidad
-            // ==========================================================
+            // ✅ EXTRAER TEXTO PARA FTS (PDF/DOCX)
             var extractedText = await _textExtractor.ExtractAsync(file, HttpContext.RequestAborted);
             var safeSearchText = string.IsNullOrWhiteSpace(extractedText) ? string.Empty : extractedText;
 
-            // Crear documento y asignar TipoDocId + SearchText
+            // Crear documento
             var doc = new Document
             {
                 OriginalName = file.FileName,
@@ -103,8 +100,8 @@ namespace DmsContayPerezIPS.API.Controllers
                 CurrentVersion = 1,
                 CreatedAt = createdAt,
                 DocumentDate = parsedDocDate,
-                TipoDocId = tipoDocId,   // 🔹 Asignación obligatoria
-                SearchText = safeSearchText,   // 🔹 Clave para Full-Text Search (evita NULL)
+                TipoDocId = tipoDocId,
+                SearchText = safeSearchText, // 👈 clave para FTS (no null)
                 MetadataJson = JsonSerializer.Serialize(new
                 {
                     DocumentDate = parsedDocDate,
@@ -178,7 +175,8 @@ namespace DmsContayPerezIPS.API.Controllers
             var query = _db.Documents.AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(name))
-                query = query.Where(d => (d.OriginalName ?? string.Empty).ToLowerInvariant().Contains(name.ToLowerInvariant()));
+                query = query.Where(d => (d.OriginalName ?? string.Empty)
+                    .ToLowerInvariant().Contains(name.ToLowerInvariant()));
 
             if (fromUpload.HasValue)
                 query = query.Where(d => d.CreatedAt >= fromUpload.Value);
@@ -197,10 +195,13 @@ namespace DmsContayPerezIPS.API.Controllers
             else if (subserieId.HasValue)
                 query = query.Where(d => d.TipoDocumental != null && d.TipoDocumental.SubserieId == subserieId.Value);
             else if (serieId.HasValue)
-                query = query.Where(d => d.TipoDocumental != null && d.TipoDocumental.Subserie != null && d.TipoDocumental.Subserie.SerieId == serieId.Value);
+                query = query.Where(d => d.TipoDocumental != null &&
+                                         d.TipoDocumental.Subserie != null &&
+                                         d.TipoDocumental.Subserie.SerieId == serieId.Value);
 
             if (!string.IsNullOrWhiteSpace(metadata))
-                query = query.Where(d => (d.MetadataJson ?? string.Empty).ToLowerInvariant().Contains(metadata.ToLowerInvariant()));
+                query = query.Where(d => (d.MetadataJson ?? string.Empty)
+                    .ToLowerInvariant().Contains(metadata.ToLowerInvariant()));
 
             var results = query.Select(d => new
             {
@@ -211,8 +212,11 @@ namespace DmsContayPerezIPS.API.Controllers
                 d.CreatedAt,
                 d.DocumentDate,
                 Tipo = d.TipoDocumental == null ? null : d.TipoDocumental.Nombre,
-                Subserie = d.TipoDocumental != null && d.TipoDocumental.Subserie != null ? d.TipoDocumental.Subserie.Nombre : null,
-                Serie = d.TipoDocumental != null && d.TipoDocumental.Subserie != null && d.TipoDocumental.Subserie.Serie != null
+                Subserie = d.TipoDocumental != null && d.TipoDocumental.Subserie != null
+                    ? d.TipoDocumental.Subserie.Nombre
+                    : null,
+                Serie = d.TipoDocumental != null && d.TipoDocumental.Subserie != null &&
+                        d.TipoDocumental.Subserie.Serie != null
                     ? d.TipoDocumental.Subserie.Serie.Nombre
                     : null,
                 d.MetadataJson

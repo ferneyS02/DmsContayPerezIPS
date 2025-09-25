@@ -2,6 +2,7 @@ using DmsContayPerezIPS.API.Services;               // ITextExtractor / PdfDocxT
 using DmsContayPerezIPS.Infrastructure.Persistence;
 using DmsContayPerezIPS.Infrastructure.Seed;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;                    // <- necesario para IFormFile en MapType
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -90,6 +91,13 @@ builder.Services.AddSwaggerGen(c =>
             },
             Array.Empty<string>()
         }
+    });
+
+    // ? Arreglo para endpoints con IFormFile en multipart/form-data
+    c.MapType<IFormFile>(() => new OpenApiSchema
+    {
+        Type = "string",
+        Format = "binary"
     });
 });
 
