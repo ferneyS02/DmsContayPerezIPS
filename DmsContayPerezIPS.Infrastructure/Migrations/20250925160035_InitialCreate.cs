@@ -49,19 +49,6 @@ namespace DmsContayPerezIPS.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Tags",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "text", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Tags", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -217,7 +204,7 @@ namespace DmsContayPerezIPS.Infrastructure.Migrations
                     CentralUntil = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     DocumentDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     SearchText = table.Column<string>(type: "text", nullable: false),
-                    SearchVector = table.Column<NpgsqlTsVector>(type: "tsvector", nullable: false)
+                    SearchVector = table.Column<NpgsqlTsVector>(type: "tsvector", nullable: true)
                         .Annotation("Npgsql:TsVectorConfig", "spanish")
                         .Annotation("Npgsql:TsVectorProperties", new[] { "SearchText" }),
                     CreatorId = table.Column<long>(type: "bigint", nullable: true)
@@ -241,31 +228,6 @@ namespace DmsContayPerezIPS.Infrastructure.Migrations
                         column: x => x.CreatorId,
                         principalTable: "Users",
                         principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "DocumentTags",
-                columns: table => new
-                {
-                    DocumentId = table.Column<long>(type: "bigint", nullable: false),
-                    TagId = table.Column<long>(type: "bigint", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DocumentTags", x => new { x.DocumentId, x.TagId });
-                    table.ForeignKey(
-                        name: "FK_DocumentTags_Documents_DocumentId",
-                        column: x => x.DocumentId,
-                        principalTable: "Documents",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_DocumentTags_Tags_TagId",
-                        column: x => x.TagId,
-                        principalTable: "Tags",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -422,11 +384,6 @@ namespace DmsContayPerezIPS.Infrastructure.Migrations
                 column: "TipoDocId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DocumentTags_TagId",
-                table: "DocumentTags",
-                column: "TagId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_DocumentVersions_DocumentId",
                 table: "DocumentVersions",
                 column: "DocumentId");
@@ -469,13 +426,7 @@ namespace DmsContayPerezIPS.Infrastructure.Migrations
                 name: "AuditLogs");
 
             migrationBuilder.DropTable(
-                name: "DocumentTags");
-
-            migrationBuilder.DropTable(
                 name: "DocumentVersions");
-
-            migrationBuilder.DropTable(
-                name: "Tags");
 
             migrationBuilder.DropTable(
                 name: "Documents");

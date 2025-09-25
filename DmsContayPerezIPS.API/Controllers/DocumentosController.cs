@@ -17,31 +17,18 @@ namespace DmsContayPerezIPS.API.Controllers
         private readonly AppDbContext _db;
         private readonly IMinioClient _minio;
         private readonly string _bucket;
-        private readonly ITextExtractor _textExtractor;   // ✅ extractor
+        private readonly ITextExtractor _textExtractor;   // extractor
 
         public DocumentosController(
             AppDbContext db,
             IMinioClient minio,
             IConfiguration config,
-            ITextExtractor textExtractor)                 // ✅ inyección por ctor
+            ITextExtractor textExtractor)
         {
             _db = db;
             _minio = minio;
             _bucket = config["MinIO:Bucket"] ?? "dms";
-            _textExtractor = textExtractor;               // ✅ guardar ref
-        }
-
-        // ===== DTO para subir (requerido por Swagger para forms + archivo) =====
-        public class UploadDocumentForm
-        {
-            /// <summary>Archivo a subir (PDF o DOCX)</summary>
-            public IFormFile? File { get; set; }
-
-            /// <summary>Tipo documental (FK obligatoria)</summary>
-            public long TipoDocId { get; set; }
-
-            /// <summary>Fecha del documento (opcional). Acepta "2025-09-22" o "22 septiembre 2025".</summary>
-            public string? DocumentDate { get; set; }
+            _textExtractor = textExtractor;
         }
 
         // ==========================================================
@@ -50,71 +37,55 @@ namespace DmsContayPerezIPS.API.Controllers
         [HttpPost("upload")]
         [Authorize]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> Upload([FromForm] UploadDocumentForm form)
+        public async Task<IActionResult> Upload([FromForm] IFormFile file, [FromForm] long tipoDocId, [FromForm] string? documentDate = null)
         {
-            if (form.File == null || form.File.Length == 0)
+            if (file == null || file.Length == 0)
                 return BadRequest("Archivo inválido");
 
-            if (form.TipoDocId <= 0)
-                return BadRequest("tipoDocId inválido.");
-
-            // Validar que el TipoDocumental exista
-            var tipoDoc = await _db.TiposDocumentales.FindAsync(form.TipoDocId);
+            var tipoDoc = await _db.TiposDocumentales.FindAsync(tipoDocId);
             if (tipoDoc == null)
                 return BadRequest("El tipo documental no existe");
 
-            // Verificar/crear bucket en MinIO
             bool bucketExists = await _minio.BucketExistsAsync(new BucketExistsArgs().WithBucket(_bucket));
             if (!bucketExists)
                 await _minio.MakeBucketAsync(new MakeBucketArgs().WithBucket(_bucket));
 
-            var objectName = $"{Guid.NewGuid()}_{form.File.FileName}";
+            var objectName = $"{Guid.NewGuid()}_{file.FileName}";
 
-            // Subir a MinIO
-            using (var stream = form.File.OpenReadStream())
+            using (var stream = file.OpenReadStream())
             {
-                var contentType = string.IsNullOrWhiteSpace(form.File.ContentType)
-                    ? "application/octet-stream"
-                    : form.File.ContentType;
-
                 await _minio.PutObjectAsync(new PutObjectArgs()
                     .WithBucket(_bucket)
                     .WithObject(objectName)
                     .WithStreamData(stream)
-                    .WithObjectSize(form.File.Length)
-                    .WithContentType(contentType));
+                    .WithObjectSize(file.Length)
+                    .WithContentType(file.ContentType));
             }
 
-            // ==========================================================
-            // ✅ Parseo y normalización de fechas
-            // ==========================================================
+            // Fechas
             DateTime? parsedDocDate = null;
-            if (!string.IsNullOrWhiteSpace(form.DocumentDate))
+            if (!string.IsNullOrWhiteSpace(documentDate))
             {
-                if (SpanishDateParser.TryParse(form.DocumentDate, out var parsed))
+                if (SpanishDateParser.TryParse(documentDate, out var parsed))
                     parsedDocDate = DateTime.SpecifyKind(parsed, DateTimeKind.Unspecified);
             }
 
             var createdAt = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Unspecified);
 
-            // ==========================================================
-            // ✅ EXTRAER TEXTO PARA FTS (PDF/DOCX) — ANTES de crear la entidad
-            // ==========================================================
-            var extractedText = await _textExtractor.ExtractAsync(form.File, HttpContext.RequestAborted);
-            var safeSearchText = string.IsNullOrWhiteSpace(extractedText) ? string.Empty : extractedText;
+            // Extraer texto (PDF/DOCX)
+            var extractedText = await _textExtractor.ExtractAsync(file, HttpContext.RequestAborted);
 
-            // Crear documento y asignar TipoDocId + SearchText
             var doc = new Document
             {
-                OriginalName = form.File.FileName,
+                OriginalName = file.FileName,
                 ObjectName = objectName,
-                ContentType = string.IsNullOrWhiteSpace(form.File.ContentType) ? "application/octet-stream" : form.File.ContentType,
-                SizeBytes = form.File.Length,
+                ContentType = file.ContentType,
+                SizeBytes = file.Length,
                 CurrentVersion = 1,
                 CreatedAt = createdAt,
                 DocumentDate = parsedDocDate,
-                TipoDocId = form.TipoDocId,   // 🔹 Asignación obligatoria
-                SearchText = safeSearchText,   // 🔹 Clave para Full-Text Search (evita NULL)
+                TipoDocId = tipoDocId,
+                SearchText = string.IsNullOrWhiteSpace(extractedText) ? string.Empty : extractedText,
                 MetadataJson = JsonSerializer.Serialize(new
                 {
                     DocumentDate = parsedDocDate,
@@ -170,7 +141,7 @@ namespace DmsContayPerezIPS.API.Controllers
         }
 
         // ==========================================================
-        // 🔐 Búsqueda avanzada (por metadatos/TRD/tags)
+        // 🔐 Búsqueda avanzada (por metadatos/TRD)
         // ==========================================================
         [HttpGet("search")]
         [Authorize]
@@ -183,13 +154,12 @@ namespace DmsContayPerezIPS.API.Controllers
             long? serieId,
             long? subserieId,
             long? tipoDocId,
-            string? tag,
             string? metadata)
         {
             var query = _db.Documents.AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(name))
-                query = query.Where(d => (d.OriginalName ?? string.Empty).ToLowerInvariant().Contains(name.ToLowerInvariant()));
+                query = query.Where(d => d.OriginalName.ToLower().Contains(name.ToLower()));
 
             if (fromUpload.HasValue)
                 query = query.Where(d => d.CreatedAt >= fromUpload.Value);
@@ -210,11 +180,8 @@ namespace DmsContayPerezIPS.API.Controllers
             else if (serieId.HasValue)
                 query = query.Where(d => d.TipoDocumental != null && d.TipoDocumental.Subserie != null && d.TipoDocumental.Subserie.SerieId == serieId.Value);
 
-            if (!string.IsNullOrWhiteSpace(tag))
-                query = query.Where(d => d.DocumentTags != null && d.DocumentTags.Any(dt => dt.Tag != null && (dt.Tag.Name ?? string.Empty).ToLowerInvariant().Contains(tag.ToLowerInvariant())));
-
             if (!string.IsNullOrWhiteSpace(metadata))
-                query = query.Where(d => (d.MetadataJson ?? string.Empty).ToLowerInvariant().Contains(metadata.ToLowerInvariant()));
+                query = query.Where(d => d.MetadataJson != null && d.MetadataJson.ToLower().Contains(metadata.ToLower()));
 
             var results = query.Select(d => new
             {
@@ -229,9 +196,6 @@ namespace DmsContayPerezIPS.API.Controllers
                 Serie = d.TipoDocumental != null && d.TipoDocumental.Subserie != null && d.TipoDocumental.Subserie.Serie != null
                     ? d.TipoDocumental.Subserie.Serie.Nombre
                     : null,
-                Tags = d.DocumentTags != null
-                    ? d.DocumentTags.Where(t => t.Tag != null).Select(t => t.Tag!.Name).ToList()
-                    : new List<string>(),
                 d.MetadataJson
             }).ToList();
 
@@ -248,7 +212,6 @@ namespace DmsContayPerezIPS.API.Controllers
             if (string.IsNullOrWhiteSpace(q))
                 return BadRequest("Ingrese una consulta (q).");
 
-            // Usa la columna generada SearchVector con diccionario 'spanish'
             var results = await _db.Documents
                 .Where(d => d.SearchVector != null &&
                             d.SearchVector.Matches(EF.Functions.PlainToTsQuery("spanish", q)))
@@ -260,8 +223,7 @@ namespace DmsContayPerezIPS.API.Controllers
                     d.SizeBytes,
                     d.CreatedAt,
                     d.DocumentDate,
-                    // snippet simple
-                    Snippet = !string.IsNullOrEmpty(d.SearchText) && d.SearchText.Length > 240
+                    Snippet = d.SearchText != null && d.SearchText.Length > 240
                         ? d.SearchText.Substring(0, 240) + "..."
                         : d.SearchText
                 })

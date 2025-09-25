@@ -3,6 +3,8 @@ using System.Linq;
 using DmsContayPerezIPS.Domain.Entities;
 using DmsContayPerezIPS.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
+// Necesario para HasPostgresExtension / HasGeneratedTsVectorColumn
+using Npgsql.EntityFrameworkCore.PostgreSQL;
 
 namespace DmsContayPerezIPS.Infrastructure.Persistence
 {
@@ -10,6 +12,7 @@ namespace DmsContayPerezIPS.Infrastructure.Persistence
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
+        // DbSets
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<SerieDocumental> Series { get; set; }
@@ -17,8 +20,6 @@ namespace DmsContayPerezIPS.Infrastructure.Persistence
         public DbSet<TipoDocumental> TiposDocumentales { get; set; }
         public DbSet<Document> Documents { get; set; }
         public DbSet<DocumentVersion> DocumentVersions { get; set; }
-        public DbSet<Tag> Tags { get; set; }
-        public DbSet<DocumentTag> DocumentTags { get; set; }
         public DbSet<Folder> Folders { get; set; }
         public DbSet<AuditLog> AuditLogs { get; set; }
 
@@ -50,25 +51,12 @@ namespace DmsContayPerezIPS.Infrastructure.Persistence
                 .HasConversion<string>();
 
             // ==========================================================
-            // 🔹 Relaciones
+            // 🔹 Relaciones (sin Tags)
             // ==========================================================
-            modelBuilder.Entity<DocumentTag>()
-                .HasKey(dt => new { dt.DocumentId, dt.TagId });
-
             modelBuilder.Entity<Document>()
                 .HasMany(d => d.Versions)
                 .WithOne(v => v.Document)
                 .HasForeignKey(v => v.DocumentId);
-
-            modelBuilder.Entity<Document>()
-                .HasMany(d => d.DocumentTags)
-                .WithOne(dt => dt.Document)
-                .HasForeignKey(dt => dt.DocumentId);
-
-            modelBuilder.Entity<Tag>()
-                .HasMany(t => t.DocumentTags)
-                .WithOne(dt => dt.Tag)
-                .HasForeignKey(dt => dt.TagId);
 
             modelBuilder.Entity<SubserieDocumental>()
                 .HasMany(s => s.TiposDocumentales)
@@ -90,16 +78,15 @@ namespace DmsContayPerezIPS.Infrastructure.Persistence
             // ===============================================
             // 🔎 PostgreSQL Full-Text Search (spanish + GIN)
             // ===============================================
-            // Extensión para búsquedas sin tildes (opcional pero útil)
             modelBuilder.HasPostgresExtension("unaccent");
 
             modelBuilder.Entity<Document>(b =>
             {
-                // Columna tsvector GENERADA a partir de SearchText, usando diccionario 'spanish'
+                // Columna tsvector generada a partir de SearchText, usando diccionario 'spanish'
                 b.HasGeneratedTsVectorColumn(
                     d => d.SearchVector,
                     "spanish",
-                    d => new { d.SearchText } // (no se omite nada: tal como en tu bloque)
+                    d => new { d.SearchText }
                 );
 
                 // Índice GIN para acelerar matches FTS
@@ -130,7 +117,7 @@ namespace DmsContayPerezIPS.Infrastructure.Persistence
             );
 
             // ==========================================================
-            // 🔹 Seed Subseries (ordenadas y re-id consecutivo 1..19)
+            // 🔹 Seed Subseries (ordenadas 1..19)
             // ==========================================================
             modelBuilder.Entity<SubserieDocumental>().HasData(
                 // Serie 1: Gestión Clínica
@@ -168,87 +155,87 @@ namespace DmsContayPerezIPS.Infrastructure.Persistence
             );
 
             // ==========================================================
-            // 🔹 Seed Tipos Documentales (ordenados por SubserieId; IDs 1..42)
+            // 🔹 Seed Tipos Documentales (IDs 1..42)
             // ==========================================================
             var fixedCreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Unspecified);
 
             modelBuilder.Entity<TipoDocumental>().HasData(
-                // Subserie 1: Historias clínicas
+                // Subserie 1
                 new TipoDocumental { Id = 1, SubserieId = 1, Nombre = "Historia de ingreso", DisposicionFinal = DisposicionFinalEnum.CT, IsActive = true, CreatedAt = fixedCreatedAt },
                 new TipoDocumental { Id = 2, SubserieId = 1, Nombre = "Notas de evolución", DisposicionFinal = DisposicionFinalEnum.CT, IsActive = true, CreatedAt = fixedCreatedAt },
                 new TipoDocumental { Id = 3, SubserieId = 1, Nombre = "Resultados de laboratorio", DisposicionFinal = DisposicionFinalEnum.CT, IsActive = true, CreatedAt = fixedCreatedAt },
 
-                // Subserie 2: Incapacidades médicas
+                // Subserie 2
                 new TipoDocumental { Id = 4, SubserieId = 2, Nombre = "Certificado de incapacidad", DisposicionFinal = DisposicionFinalEnum.E, IsActive = true, CreatedAt = fixedCreatedAt },
                 new TipoDocumental { Id = 5, SubserieId = 2, Nombre = "Soporte médico", DisposicionFinal = DisposicionFinalEnum.E, IsActive = true, CreatedAt = fixedCreatedAt },
 
-                // Subserie 3: Capacitaciones médicas
+                // Subserie 3
                 new TipoDocumental { Id = 6, SubserieId = 3, Nombre = "Lista de asistencia", DisposicionFinal = DisposicionFinalEnum.E, IsActive = true, CreatedAt = fixedCreatedAt },
                 new TipoDocumental { Id = 7, SubserieId = 3, Nombre = "Material entregado", DisposicionFinal = DisposicionFinalEnum.E, IsActive = true, CreatedAt = fixedCreatedAt },
                 new TipoDocumental { Id = 8, SubserieId = 3, Nombre = "Certificados de participación", DisposicionFinal = DisposicionFinalEnum.E, IsActive = true, CreatedAt = fixedCreatedAt },
 
-                // Subserie 4: Contratos laborales
+                // Subserie 4
                 new TipoDocumental { Id = 9, SubserieId = 4, Nombre = "Contrato firmado", DisposicionFinal = DisposicionFinalEnum.CT, IsActive = true, CreatedAt = fixedCreatedAt },
                 new TipoDocumental { Id = 10, SubserieId = 4, Nombre = "Acta de terminación", DisposicionFinal = DisposicionFinalEnum.CT, IsActive = true, CreatedAt = fixedCreatedAt },
 
-                // Subserie 5: Correspondencia
+                // Subserie 5
                 new TipoDocumental { Id = 11, SubserieId = 5, Nombre = "Carta enviada", DisposicionFinal = DisposicionFinalEnum.E, IsActive = true, CreatedAt = fixedCreatedAt },
                 new TipoDocumental { Id = 12, SubserieId = 5, Nombre = "Carta recibida", DisposicionFinal = DisposicionFinalEnum.E, IsActive = true, CreatedAt = fixedCreatedAt },
 
-                // Subserie 6: Capacitaciones administrativas
+                // Subserie 6
                 new TipoDocumental { Id = 13, SubserieId = 6, Nombre = "Lista de asistencia", DisposicionFinal = DisposicionFinalEnum.E, IsActive = true, CreatedAt = fixedCreatedAt },
                 new TipoDocumental { Id = 14, SubserieId = 6, Nombre = "Material entregado", DisposicionFinal = DisposicionFinalEnum.E, IsActive = true, CreatedAt = fixedCreatedAt },
                 new TipoDocumental { Id = 15, SubserieId = 6, Nombre = "Certificados de participación", DisposicionFinal = DisposicionFinalEnum.E, IsActive = true, CreatedAt = fixedCreatedAt },
 
-                // Subserie 7: Estados financieros
+                // Subserie 7
                 new TipoDocumental { Id = 16, SubserieId = 7, Nombre = "Balance general", DisposicionFinal = DisposicionFinalEnum.CT, IsActive = true, CreatedAt = fixedCreatedAt },
                 new TipoDocumental { Id = 17, SubserieId = 7, Nombre = "Estado de resultados", DisposicionFinal = DisposicionFinalEnum.CT, IsActive = true, CreatedAt = fixedCreatedAt },
 
-                // Subserie 8: Facturas
+                // Subserie 8
                 new TipoDocumental { Id = 18, SubserieId = 8, Nombre = "Factura de proveedor", DisposicionFinal = DisposicionFinalEnum.E, IsActive = true, CreatedAt = fixedCreatedAt },
                 new TipoDocumental { Id = 19, SubserieId = 8, Nombre = "Factura de cliente", DisposicionFinal = DisposicionFinalEnum.E, IsActive = true, CreatedAt = fixedCreatedAt },
 
-                // Subserie 9: Capacitaciones contables
+                // Subserie 9
                 new TipoDocumental { Id = 20, SubserieId = 9, Nombre = "Lista de asistencia", DisposicionFinal = DisposicionFinalEnum.E, IsActive = true, CreatedAt = fixedCreatedAt },
                 new TipoDocumental { Id = 21, SubserieId = 9, Nombre = "Material entregado", DisposicionFinal = DisposicionFinalEnum.E, IsActive = true, CreatedAt = fixedCreatedAt },
                 new TipoDocumental { Id = 22, SubserieId = 9, Nombre = "Certificados de participación", DisposicionFinal = DisposicionFinalEnum.E, IsActive = true, CreatedAt = fixedCreatedAt },
 
-                // Subserie 10: Procesos judiciales
+                // Subserie 10
                 new TipoDocumental { Id = 23, SubserieId = 10, Nombre = "Demanda", DisposicionFinal = DisposicionFinalEnum.CT, IsActive = true, CreatedAt = fixedCreatedAt },
                 new TipoDocumental { Id = 24, SubserieId = 10, Nombre = "Sentencia", DisposicionFinal = DisposicionFinalEnum.CT, IsActive = true, CreatedAt = fixedCreatedAt },
 
-                // Subserie 11: Capacitaciones jurídicas
+                // Subserie 11
                 new TipoDocumental { Id = 25, SubserieId = 11, Nombre = "Lista de asistencia", DisposicionFinal = DisposicionFinalEnum.E, IsActive = true, CreatedAt = fixedCreatedAt },
                 new TipoDocumental { Id = 26, SubserieId = 11, Nombre = "Material entregado", DisposicionFinal = DisposicionFinalEnum.E, IsActive = true, CreatedAt = fixedCreatedAt },
                 new TipoDocumental { Id = 27, SubserieId = 11, Nombre = "Certificados de participación", DisposicionFinal = DisposicionFinalEnum.E, IsActive = true, CreatedAt = fixedCreatedAt },
 
-                // Subserie 12: Manuales de procesos
+                // Subserie 12
                 new TipoDocumental { Id = 28, SubserieId = 12, Nombre = "Manual de calidad", DisposicionFinal = DisposicionFinalEnum.S, IsActive = true, CreatedAt = fixedCreatedAt },
 
-                // Subserie 13: Registros de calidad
+                // Subserie 13
                 new TipoDocumental { Id = 29, SubserieId = 13, Nombre = "Registro de auditoría interna", DisposicionFinal = DisposicionFinalEnum.E, IsActive = true, CreatedAt = fixedCreatedAt },
 
-                // Subserie 14: Capacitaciones en calidad
+                // Subserie 14
                 new TipoDocumental { Id = 30, SubserieId = 14, Nombre = "Lista de asistencia", DisposicionFinal = DisposicionFinalEnum.E, IsActive = true, CreatedAt = fixedCreatedAt },
                 new TipoDocumental { Id = 31, SubserieId = 14, Nombre = "Material entregado", DisposicionFinal = DisposicionFinalEnum.E, IsActive = true, CreatedAt = fixedCreatedAt },
                 new TipoDocumental { Id = 32, SubserieId = 14, Nombre = "Certificados de participación", DisposicionFinal = DisposicionFinalEnum.E, IsActive = true, CreatedAt = fixedCreatedAt },
 
-                // Subserie 15: Accidentes laborales
+                // Subserie 15
                 new TipoDocumental { Id = 33, SubserieId = 15, Nombre = "Reporte de accidente", DisposicionFinal = DisposicionFinalEnum.CT, IsActive = true, CreatedAt = fixedCreatedAt },
 
-                // Subserie 16: Capacitaciones SST
+                // Subserie 16
                 new TipoDocumental { Id = 34, SubserieId = 16, Nombre = "Lista de asistencia", DisposicionFinal = DisposicionFinalEnum.E, IsActive = true, CreatedAt = fixedCreatedAt },
                 new TipoDocumental { Id = 35, SubserieId = 16, Nombre = "Material entregado", DisposicionFinal = DisposicionFinalEnum.E, IsActive = true, CreatedAt = fixedCreatedAt },
                 new TipoDocumental { Id = 36, SubserieId = 16, Nombre = "Certificados de participación", DisposicionFinal = DisposicionFinalEnum.E, IsActive = true, CreatedAt = fixedCreatedAt },
 
-                // Subserie 17: Hojas de vida de equipos
+                // Subserie 17
                 new TipoDocumental { Id = 37, SubserieId = 17, Nombre = "Ficha técnica del equipo", DisposicionFinal = DisposicionFinalEnum.M, IsActive = true, CreatedAt = fixedCreatedAt },
 
-                // Subserie 18: Mantenimientos
+                // Subserie 18
                 new TipoDocumental { Id = 38, SubserieId = 18, Nombre = "Reporte de mantenimiento preventivo", DisposicionFinal = DisposicionFinalEnum.E, IsActive = true, CreatedAt = fixedCreatedAt },
                 new TipoDocumental { Id = 39, SubserieId = 18, Nombre = "Reporte de mantenimiento correctivo", DisposicionFinal = DisposicionFinalEnum.E, IsActive = true, CreatedAt = fixedCreatedAt },
 
-                // Subserie 19: Capacitaciones en equipos biomédicos
+                // Subserie 19
                 new TipoDocumental { Id = 40, SubserieId = 19, Nombre = "Lista de asistencia", DisposicionFinal = DisposicionFinalEnum.E, IsActive = true, CreatedAt = fixedCreatedAt },
                 new TipoDocumental { Id = 41, SubserieId = 19, Nombre = "Material entregado", DisposicionFinal = DisposicionFinalEnum.E, IsActive = true, CreatedAt = fixedCreatedAt },
                 new TipoDocumental { Id = 42, SubserieId = 19, Nombre = "Certificados de participación", DisposicionFinal = DisposicionFinalEnum.E, IsActive = true, CreatedAt = fixedCreatedAt }

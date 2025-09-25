@@ -119,7 +119,6 @@ namespace DmsContayPerezIPS.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<NpgsqlTsVector>("SearchVector")
-                        .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("tsvector")
                         .HasAnnotation("Npgsql:TsVectorConfig", "spanish")
@@ -151,24 +150,6 @@ namespace DmsContayPerezIPS.Infrastructure.Migrations
                     b.HasIndex("TipoDocId");
 
                     b.ToTable("Documents");
-                });
-
-            modelBuilder.Entity("DmsContayPerezIPS.Domain.Entities.DocumentTag", b =>
-                {
-                    b.Property<long>("DocumentId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("TagId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.HasKey("DocumentId", "TagId");
-
-                    b.HasIndex("TagId");
-
-                    b.ToTable("DocumentTags");
                 });
 
             modelBuilder.Entity("DmsContayPerezIPS.Domain.Entities.DocumentVersion", b =>
@@ -582,23 +563,6 @@ namespace DmsContayPerezIPS.Infrastructure.Migrations
                             RetencionGestion = (short)5,
                             SerieId = 7L
                         });
-                });
-
-            modelBuilder.Entity("DmsContayPerezIPS.Domain.Entities.Tag", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("DmsContayPerezIPS.Domain.Entities.TipoDocumental", b =>
@@ -1182,25 +1146,6 @@ namespace DmsContayPerezIPS.Infrastructure.Migrations
                     b.Navigation("TipoDocumental");
                 });
 
-            modelBuilder.Entity("DmsContayPerezIPS.Domain.Entities.DocumentTag", b =>
-                {
-                    b.HasOne("DmsContayPerezIPS.Domain.Entities.Document", "Document")
-                        .WithMany("DocumentTags")
-                        .HasForeignKey("DocumentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DmsContayPerezIPS.Domain.Entities.Tag", "Tag")
-                        .WithMany("DocumentTags")
-                        .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Document");
-
-                    b.Navigation("Tag");
-                });
-
             modelBuilder.Entity("DmsContayPerezIPS.Domain.Entities.DocumentVersion", b =>
                 {
                     b.HasOne("DmsContayPerezIPS.Domain.Entities.Document", "Document")
@@ -1268,8 +1213,6 @@ namespace DmsContayPerezIPS.Infrastructure.Migrations
 
             modelBuilder.Entity("DmsContayPerezIPS.Domain.Entities.Document", b =>
                 {
-                    b.Navigation("DocumentTags");
-
                     b.Navigation("Versions");
                 });
 
@@ -1293,11 +1236,6 @@ namespace DmsContayPerezIPS.Infrastructure.Migrations
             modelBuilder.Entity("DmsContayPerezIPS.Domain.Entities.SubserieDocumental", b =>
                 {
                     b.Navigation("TiposDocumentales");
-                });
-
-            modelBuilder.Entity("DmsContayPerezIPS.Domain.Entities.Tag", b =>
-                {
-                    b.Navigation("DocumentTags");
                 });
 
             modelBuilder.Entity("DmsContayPerezIPS.Domain.Entities.TipoDocumental", b =>
