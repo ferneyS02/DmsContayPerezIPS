@@ -76,8 +76,7 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-25T14:29:05.454Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -102,8 +101,7 @@
               "RelativeToolTip": "DmsContayPerezIPS.Infrastructure\\AppDbContext.cs",
               "ViewState": "AgIAAPIAAAAAAAAAAAAAAPUAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-25T15:25:26.518Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-25T15:25:26.518Z"
             },
             {
               "$type": "Document",
@@ -139,8 +137,7 @@
               "RelativeToolTip": "DmsContayPerezIPS.API\\Program.cs",
               "ViewState": "AgIAAHQAAAAAAAAAAAAuwIYAAAAEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-25T12:49:43.778Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-25T12:49:43.778Z"
             },
             {
               "$type": "Document",
