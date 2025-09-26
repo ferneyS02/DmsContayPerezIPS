@@ -9,8 +9,8 @@ namespace DmsContayPerezIPS.Domain.Entities
         public long Id { get; set; }
 
         // 🔹 Datos básicos
-        public string OriginalName { get; set; } = null!; // Nombre original del archivo
-        public string ObjectName { get; set; } = null!; // Nombre real en MinIO
+        public string OriginalName { get; set; } = null!;   // Nombre original del archivo
+        public string ObjectName { get; set; } = null!;     // Nombre real en MinIO
         public string ContentType { get; set; } = null!;
         public long SizeBytes { get; set; }
 
@@ -47,8 +47,8 @@ namespace DmsContayPerezIPS.Domain.Entities
         /// <summary>Texto plano indexable. Usa "" en vez de null.</summary>
         public string SearchText { get; set; } = string.Empty;
 
-        /// <summary>tsvector generado (columna computada). Nullable y solo lectura.</summary>
-        public NpgsqlTsVector? SearchVector { get; private set; }
+        /// <summary>tsvector generado (columna computada por Postgres). No-null.</summary>
+        public NpgsqlTsVector SearchVector { get; private set; } = null!;
 
         // ==========================================================
         // 🔹 Relaciones
