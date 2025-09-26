@@ -2,8 +2,9 @@
 using Microsoft.AspNetCore.Http;
 using System.Text;
 using System.Text.RegularExpressions;
-using UglyToad.PdfPig;            // <- PdfPig (solo lectura)
-using UglyToad.PdfPig.Content;
+
+// 👇 PdfPig
+using UglyToad.PdfPig;
 
 namespace DmsContayPerezIPS.API.Services
 {
@@ -13,8 +14,8 @@ namespace DmsContayPerezIPS.API.Services
         {
             if (file == null || file.Length == 0) return string.Empty;
 
-            var name = file.FileName?.ToLowerInvariant() ?? string.Empty;
-            var ctType = file.ContentType?.ToLowerInvariant() ?? string.Empty;
+            var name = file.FileName?.ToLowerInvariant() ?? "";
+            var ctType = file.ContentType?.ToLowerInvariant() ?? "";
 
             if (name.EndsWith(".pdf") || ctType.Contains("pdf"))
                 return await ExtractPdfAsync(file, ct);
@@ -22,13 +23,12 @@ namespace DmsContayPerezIPS.API.Services
             if (name.EndsWith(".docx") || ctType.Contains("officedocument.wordprocessingml.document"))
                 return await ExtractDocxAsync(file, ct);
 
-            // Otros tipos (doc/xlsx/jpg/png): por ahora no extraemos
             return string.Empty;
         }
 
         private static async Task<string> ExtractPdfAsync(IFormFile file, CancellationToken ct)
         {
-            // PdfPig requiere stream seekable → copiamos a MemoryStream
+            // PdfPig necesita stream "seekable": copiamos a memoria
             using var ms = new MemoryStream();
             await file.CopyToAsync(ms, ct);
             ms.Position = 0;
@@ -53,8 +53,7 @@ namespace DmsContayPerezIPS.API.Services
 
             using var doc = WordprocessingDocument.Open(ms, false);
             var body = doc.MainDocumentPart?.Document?.Body;
-            var text = body?.InnerText ?? string.Empty;
-            return Normalize(text);
+            return Normalize(body?.InnerText ?? string.Empty);
         }
 
         private static string Normalize(string text)
@@ -62,11 +61,8 @@ namespace DmsContayPerezIPS.API.Services
             if (string.IsNullOrWhiteSpace(text)) return string.Empty;
             text = text.Replace("\0", " ");
             text = Regex.Replace(text, @"\s+", " ").Trim();
-
             const int maxChars = 1_000_000;
-            if (text.Length > maxChars)
-                text = text[..maxChars];
-
+            if (text.Length > maxChars) text = text[..maxChars];
             return text;
         }
     }
