@@ -215,5 +215,41 @@
     "Order": 0,
     "Parameters": [],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DmsContayPerezIPS.API.Controllers.DevAuthController",
+    "Method": "CreateToken",
+    "RelativePath": "dev/auth/token",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "req",
+        "Type": "DmsContayPerezIPS.API.Controllers.DevAuthController\u002BTokenRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DmsContayPerezIPS.API.Controllers.RbacTestController",
+    "Method": "Ping",
+    "RelativePath": "dev/rbac/ping",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DmsContayPerezIPS.API.Controllers.RbacTestController",
+    "Method": "Secured",
+    "RelativePath": "dev/rbac/secured",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
   }
 ]

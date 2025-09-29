@@ -70,6 +70,37 @@
         }
       }
     },
+    "/dev/auth/token": {
+      "post": {
+        "tags": [
+          "DevAuth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TokenRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TokenRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/TokenRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Documentos/upload": {
       "post": {
         "tags": [
@@ -253,6 +284,30 @@
         }
       }
     },
+    "/dev/rbac/ping": {
+      "get": {
+        "tags": [
+          "RbacTest"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/dev/rbac/secured": {
+      "get": {
+        "tags": [
+          "RbacTest"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/TiposDocumentales/list": {
       "get": {
         "tags": [
@@ -314,6 +369,25 @@
     }
   },
   "components": {
+    "schemas": {
+      "TokenRequest": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "username": {
+            "type": "string",
+            "nullable": true
+          },
+          "makeAdmin": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
     "securitySchemes": {
       "Bearer": {
         "type": "apiKey",
